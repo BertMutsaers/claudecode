@@ -115,15 +115,18 @@ nav a:hover { color: var(--primary); }
 }
 
 .hero-illustration {
-  width: 260px;
-  height: 260px;
-  background: #fff;
+  width: 380px;
+  height: 380px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 100px;
-  box-shadow: 0 20px 60px rgba(249,115,22,0.15);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(249,115,22,0.25);
+}
+
+.hero-illustration img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
 }
 
 /* BUTTONS */
