@@ -41,7 +41,7 @@ body {
   transition: background 0.3s;
 }
 
-/* Hintergrund der Tab-Leiste = Farbe des aktiven Tabs */
+/* Hintergrund der Tab-Leiste */
 .top-tab-bar.kinder-bg   { background: linear-gradient(180deg, #ffa726 0%, #ff9800 100%); }
 .top-tab-bar.vorleser-bg { background: linear-gradient(180deg, #42a5f5 0%, #1e88e5 100%); }
 .top-tab-bar.alle-bg     { background: linear-gradient(180deg, #66bb6a 0%, #43a047 100%); }
@@ -67,8 +67,8 @@ body {
 }
 
 .kinder-tab.active   { background: #fff8ee; color: var(--orange); }
-.vorleser-tab.active { background: #eff6ff; color: var(--blue-dark); }
-.alle-tab.active     { background: #f0fdf4; color: var(--green-dark); }
+.vorleser-tab.active { background: #dbeafe; color: var(--blue-dark); }
+.alle-tab.active     { background: #dcfce7; color: var(--green-dark); }
 
 /* INAKTIVE TABS: schwebend — vollständig abgerundet */
 .top-tab:not(.active) {
@@ -78,9 +78,9 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-.kinder-tab:not(.active)   { background: rgba(230,81,0,0.85); }
-.vorleser-tab:not(.active) { background: rgba(13,71,161,0.85); }
-.alle-tab:not(.active)     { background: rgba(27,94,32,0.85); }
+.kinder-tab:not(.active)   { background: #f97316; }
+.vorleser-tab:not(.active) { background: #1d4ed8; }
+.alle-tab:not(.active)     { background: #15803d; }
 
 .top-tab:not(.active):hover {
   transform: translateY(-3px);
@@ -96,9 +96,9 @@ body {
   transition: background 0.3s;
 }
 
-.kinder-header   { background: linear-gradient(160deg, #fff8ee 0%, #ffe0b2 100%); }
-.vorleser-header { background: linear-gradient(160deg, #eff6ff 0%, #bbdefb 100%); }
-.alle-header     { background: linear-gradient(160deg, #f0fdf4 0%, #c8e6c9 100%); }
+.kinder-header   { background: #fff8ee; }
+.vorleser-header { background: #dbeafe; }
+.alle-header     { background: #dcfce7; }
 
 .header-inner {
   display: flex;
