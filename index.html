@@ -10,8 +10,15 @@
 </head>
 <body>
 
+  <!-- TAB BAR ganz oben -->
+  <div class="top-tab-bar kinder-bg">
+    <button class="top-tab active kinder-tab" data-tab="kinder">für Kinder</button>
+    <button class="top-tab vorleser-tab" data-tab="vorleser">für Vorleser</button>
+    <button class="top-tab alle-tab" data-tab="alle">für Alle</button>
+  </div>
+
   <!-- HEADER -->
-  <header>
+  <header class="site-header kinder-header">
     <div class="container header-inner">
       <a href="/" class="logo">VORLESEN.DE</a>
       <div class="header-icons">
@@ -48,21 +55,6 @@
   <section class="tabs-section" id="tabs">
     <div class="container">
 
-      <!-- Tab Buttons -->
-      <div class="tab-nav">
-        <button class="tab-btn active kinder" data-tab="kinder">
-          <span class="tab-icon">📖</span>
-          <span>Für Kinder</span>
-        </button>
-        <button class="tab-btn vorleser" data-tab="vorleser">
-          <span class="tab-icon">👩‍👦</span>
-          <span>Für Vorleser</span>
-        </button>
-        <button class="tab-btn alle" data-tab="alle">
-          <span class="tab-icon">🌍</span>
-          <span>Für Alle</span>
-        </button>
-      </div>
 
       <!-- Tab: Für Kinder -->
       <div class="tab-content active kinder-content" id="tab-kinder">
@@ -250,15 +242,23 @@
   </footer>
 
   <script>
-    const btns = document.querySelectorAll('.tab-btn');
+    const topTabs = document.querySelectorAll('.top-tab');
     const contents = document.querySelectorAll('.tab-content');
+    const header = document.querySelector('.site-header');
+    const tabBar = document.querySelector('.top-tab-bar');
 
-    btns.forEach(btn => {
+    topTabs.forEach(btn => {
       btn.addEventListener('click', () => {
-        btns.forEach(b => b.classList.remove('active'));
-        contents.forEach(c => c.classList.remove('active'));
+        const tab = btn.dataset.tab;
+
+        topTabs.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+
+        contents.forEach(c => c.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+
+        header.className = 'site-header ' + tab + '-header';
+        tabBar.className = 'top-tab-bar ' + tab + '-bg';
       });
     });
   </script>
