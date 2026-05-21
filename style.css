@@ -511,6 +511,29 @@ body {
   margin-bottom: 0;
 }
 
+.audio-player {
+  margin-top: 20px;
+  background: #fff8ee;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  border: 2px solid #fdba74;
+}
+
+.audio-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.audio-player audio {
+  width: 100%;
+  border-radius: 8px;
+  accent-color: var(--orange);
+}
+
 @media (max-width: 768px) {
   .ebene3-inhalt { flex-direction: column; gap: 24px; }
   .ebene3-bild-wrap { flex: none; width: 100%; text-align: center; position: static; }

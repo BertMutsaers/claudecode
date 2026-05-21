@@ -77,6 +77,12 @@
           <div class="ebene3-inhalt">
             <div class="ebene3-bild-wrap">
               <img id="ebene3-bild" src="" alt="" />
+              <div class="audio-player" id="audio-player" style="display:none;">
+                <div class="audio-label">🔊 Geschichte anhören</div>
+                <audio id="audio-element" controls>
+                  <source id="audio-source" src="" type="audio/mpeg" />
+                </audio>
+              </div>
             </div>
             <div class="ebene3-text" id="ebene3-text"></div>
           </div>
@@ -226,7 +232,7 @@
     const geschichten = {
       'Tiere': [
         {titel: 'Der Hoppelhase und der verlorene Schuh', bild: 'images/tiere-1.jpg'},
-        {titel: 'Der Igel und der große Regen',           bild: 'images/tiere-2.jpg'},
+        {titel: 'Der Igel und der große Regen',           bild: 'images/tiere-2.jpg', audio: 'audio/tiere-2.mp3'},
         {titel: 'Der mutige Frosch im Schilfsee',         bild: 'images/tiere-3.jpg'},
         {titel: 'Der schlafende Bär im Wald',             bild: 'images/tiere-4.jpg'},
         {titel: 'Die Maus im Erbeerbeet',                 bild: 'images/tiere-5.jpg'},
@@ -315,7 +321,7 @@
       grid.innerHTML = '';
       (geschichten[kategorie] || []).forEach(g => {
         grid.innerHTML += `
-          <div class="geschichte-card" onclick="zeigeEbene3('${g.titel.replace(/'/g,"\\'")}', '${g.bild}')">
+          <div class="geschichte-card" onclick="zeigeEbene3('${g.titel.replace(/'/g,"\\'")}', '${g.bild}', '${g.audio || ''}')">
             <div class="geschichte-bild"><img src="${g.bild}" alt="${g.titel}" /></div>
             <h3>${g.titel}</h3>
           </div>`;
@@ -327,7 +333,7 @@
       document.getElementById('ebene2').style.display = 'none';
     }
 
-    const platzhalterText = `Ganz oben auf dem Hügel beim alten Wasserturm lebte der kleine Igel Stupsi mit seiner Familie. Schon die Ur-Ur-Ur-Opa-Igel hatten dort gewohnt.
+    const platzhalterText = `Ganz oben auf dem Hügel beim alten Wasserturm lebte der kleine Igel Stupsi mit seiner Familie. Schon die Ur-Ur-Ur-Opa-Igel hatten dort gewohnt. Damals, als unten neben dem Turm noch eine große Bierbrauerei war und der Wasserturm ganz viel Wasser gespeichert hatte. Mama Igel erzählte abends manchmal davon, wenn sie alle zusammen im weichen Nest kuschtelten. Dann konnte Stupsi sich gut vorstellen, wie früher die großen Fässer rollten und die Arbeiter pfiffen.
 
 Heute war es dort ruhig und gemütlich. Im Garten wuchsen bunte Blumen, hohe Gräser und unter einem kleinen Trampolin spielten oft Kinder. Stupsi liebte es, zuzuschauen, wie sie sprangen und lachten. Manchmal flogen dabei Äpfel vom alten Baum herunter — und die mochte Stupsi fast genauso gern wie Würmer.
 
@@ -347,41 +353,73 @@ Doch bald tropfte der Regen sogar durch das Trampolin hindurch. Das Netz hielt n
 
 Plitsch. Platsch. Plopp.
 
-Stupsi zitterte. „Brrrr… mir ist kalt."
+Stupsi zitterte.
+
+„Brrrr… mir ist kalt."
 
 Er schaute sich um. Der Regen wurde stärker und stärker. Die großen Wassertropfen platschten auf den Boden und spritzten kleine Fontänen. Der Garten war plötzlich voller kleiner Pfützen.
 
-Also tappte Stupsi tapfer weiter durch den nassen Garten, die Pfoten klatschnass. Vielleicht konnte er sich in einem Hasenloch verstecken? Doch als er dort ankam, war das Loch schon voller Wasser. Es gluckerte leise vor sich hin.
+Also tappte Stupsi tapfer weiter durch den nassen Garten, die Pfoten klatschnass. Vielleicht konnte er sich in einem Hasenloch verstecken. Er wusste von einem kleinen Erdhügel am Rand des Gartens, wo manchmal Kaninchen wühlten. Vielleicht war dort ein trockenes Plätzchen?
+
+Doch als er dort ankam, war das Loch schon voller Wasser. Es gluckerte leise vor sich hin.
 
 „Oh je", seufzte Stupsi leise und schaute traurig hinein.
 
-Da entdeckte er plötzlich etwas Merkwürdiges. Mitten im Garten, direkt neben dem großen Holunderbusch, lag ein riesengroßes grünes Blatt. Es war fast so groß wie Stupsi selbst!
+Er überlegte. Er könnte nach Hause zurücklaufen — aber das war weit. Und der Regen wurde nicht weniger. Nein, er musste eine andere Lösung finden.
+
+Da entdeckte er plötzlich etwas Merkwürdiges.
+
+Mitten im Garten, direkt neben dem großen Holunderbusch, lag ein riesengroßes grünes Blatt. Es war fast so groß wie Stupsi selbst! Mit einem breiten, festen Stiel und glatten Rändern, die sich leicht nach oben bogen.
+
+So ein Blatt hatte Stupsi noch nie gesehen.
 
 „Wo kommst du wohl her?", flüsterte er und blinzelte das Blatt neugierig an.
 
-Vorsichtig hob er es hoch — es war leichter als gedacht — und hielt es über seinen Kopf.
+Vorsichtig stupste er es mit der Nase an. Dann hob er es hoch — es war leichter als gedacht — und hielt es über seinen Kopf.
 
-Und siehe da: Der Regen prasselte auf das Blatt. Die Tropfen rollten an den Seiten herunter. Stupsis Rücken blieb trocken. Seine Pfoten blieben trocken. Sogar die Nasenspitze blieb trocken!
+Und siehe da:
 
-„Das ist ja wunderbar!", rief er und drehte sich einmal im Kreis.
+Der Regen prasselte auf das Blatt. Die Tropfen rollten an den Seiten herunter. Stupsis Rücken blieb trocken. Seine Pfoten blieben trocken. Sogar die Nasenspitze blieb trocken!
 
-Nun lief er fröhlich durch den Garten, das große grüne Blatt wie ein kleines Dach über dem Kopf. Die Tropfen trommelten lustig darauf, wie eine kleine Musik.
+„Das ist ja wunderbar!", rief er und drehte sich einmal im Kreis, so groß war seine Freude.
 
-Seine Igel-Freunde Finni, Borsti und die kleine Mimi saßen bibbernd unter dem Holunderbusch.
+Nun lief er fröhlich durch den Garten, das große grüne Blatt wie ein kleines Dach über dem Kopf.
 
-„Stupsi! Wie bleibst du denn trocken?", rief Finni.
+Pitsch. Patsch.
 
-„Mit einem Regenblatt!", grinste Stupsi stolz.
+Aber diesmal machte ihm der Regen gar nichts mehr aus. Im Gegenteil — es machte sogar Spaß! Die Tropfen trommelten lustig auf sein Blatt, wie eine kleine Musik.
 
-Schnell suchten auch die anderen Igel nach großen Blättern. Und bald liefen überall kleine Igel mit grünen Regenblättern durch den Garten. Jeder hatte sein eigenes Dach über dem Kopf. Und keiner war mehr nass.
+Seine Igel-Freunde Finni, Borsti und die kleine Mimi saßen bibbernd unter dem Holunderbusch und sahen ihn staunend an.
 
-Sie liefen sogar gemeinsam durch die größten Pfützen und lachten und quieksten vor Vergnügen.
+„Stupsi! Wie bleibst du denn trocken?", rief Finni und reckte den Hals.
 
-Und Stupsi wurde von diesem Tag an überall bekannt als:
+„Ja, du bist ja gar nicht nass!", staunte Borsti.
+
+Die kleine Mimi sagte gar nichts. Ihre Augen wurden nur ganz groß und rund.
+
+Stupsi grinste stolz.
+
+„Mit einem Regenblatt!"
+
+Er hob das Blatt kurz hoch, damit alle es sehen konnten. Dann erklärte er, wie er es gefunden hatte und wie gut es funktionierte.
+
+Schnell suchten auch die anderen Igel nach großen Blättern. Finni fand eins unter dem Holunderbusch. Borsti entdeckte ein besonders breites Blatt am Zaun. Und die kleine Mimi, die geduldigst suchte, fand das allerschönste: ein Blatt mit sanft geschwungenen Rändern, fast wie ein kleiner Hut.
+
+Und bald liefen überall kleine Igel mit grünen Regenblättern durch den Garten am Wasserturm. Jeder hatte sein eigenes Dach über dem Kopf. Und keiner war mehr nass.
+
+Alle waren froh und warm.
+
+Sie liefen sogar gemeinsam durch die größten Pfützen, weil der Regen ihnen jetzt nicht mehr viel anhaben konnte. Sie lachten und quieksten vor Vergnügen.
+
+Und Stupsi?
+
+Der wurde von diesem Tag an überall bekannt als:
 
 Stupsi, der Erfinder des Regenblattes.
 
-Am Abend kuschelte Stupsi sich zufrieden in sein weiches Nest. Draußen regnete es noch ganz leise weiter.
+Am Abend, als der Regen langsam nachließ und die Wolken weiterzogen, kuschelte Stupsi sich zufrieden in sein weiches Nest. Mama Igel deckte ihn warm zu. Papa Igel brummte leise ein kleines Lied.
+
+Draußen regnete es noch ganz leise weiter.
 
 „Pitsch… patsch… plitsch…"
 
@@ -389,13 +427,25 @@ Doch Stupsi schlief längst glücklich ein — und träumte von großen grünen 
 
     let aktuelleKategorie = '';
 
-    function zeigeEbene3(titel, bild) {
+    function zeigeEbene3(titel, bild, audio) {
       aktuelleKategorie = document.getElementById('ebene2-titel').textContent;
       document.getElementById('ebene2').style.display = 'none';
       document.getElementById('ebene3').style.display = 'block';
       document.getElementById('ebene3-titel').textContent = titel;
       document.getElementById('ebene3-bild').src = bild;
       document.getElementById('ebene3-bild').alt = titel;
+
+      const audioPlayer = document.getElementById('audio-player');
+      const audioElement = document.getElementById('audio-element');
+      const audioSource = document.getElementById('audio-source');
+      if (audio) {
+        audioSource.src = audio;
+        audioElement.load();
+        audioPlayer.style.display = 'block';
+      } else {
+        audioPlayer.style.display = 'none';
+        audioElement.pause();
+      }
 
       const absaetze = platzhalterText.split('\n\n')
         .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
