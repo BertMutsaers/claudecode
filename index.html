@@ -78,10 +78,16 @@
             <div class="ebene3-bild-wrap">
               <img id="ebene3-bild" src="" alt="" />
               <div class="audio-player" id="audio-player" style="display:none;">
-                <div class="audio-label">🔊 Geschichte anhören</div>
-                <audio id="audio-element" controls>
+                <audio id="audio-element">
                   <source id="audio-source" src="" type="audio/mpeg" />
                 </audio>
+                <button class="play-btn" id="play-btn" onclick="toggleAudio()">
+                  <span class="play-btn-icon" id="play-icon">▶</span>
+                  <span class="play-btn-label" id="play-label">Geschichte anhören</span>
+                </button>
+                <div class="audio-progress-wrap">
+                  <div class="audio-progress-bar" id="audio-progress"></div>
+                </div>
               </div>
             </div>
             <div class="ebene3-text" id="ebene3-text"></div>
@@ -438,6 +444,7 @@ Doch Stupsi schlief längst glücklich ein — und träumte von großen grünen 
       const audioPlayer = document.getElementById('audio-player');
       const audioElement = document.getElementById('audio-element');
       const audioSource = document.getElementById('audio-source');
+      resetPlayBtn();
       if (audio) {
         audioSource.src = audio;
         audioElement.load();
@@ -455,10 +462,43 @@ Doch Stupsi schlief längst glücklich ein — und träumte von großen grünen 
     }
 
     function zeigeEbene2Zurueck() {
+      const audioElement = document.getElementById('audio-element');
+      audioElement.pause();
+      resetPlayBtn();
       document.getElementById('ebene3').style.display = 'none';
       document.getElementById('ebene2').style.display = 'block';
       window.scrollTo(0, 0);
     }
+
+    function toggleAudio() {
+      const audio = document.getElementById('audio-element');
+      const icon  = document.getElementById('play-icon');
+      const label = document.getElementById('play-label');
+      if (audio.paused) {
+        audio.play();
+        icon.textContent  = '⏹';
+        label.textContent = 'Stopp';
+      } else {
+        audio.pause();
+        icon.textContent  = '▶';
+        label.textContent = 'Weiter';
+      }
+    }
+
+    function resetPlayBtn() {
+      const icon  = document.getElementById('play-icon');
+      const label = document.getElementById('play-label');
+      if (icon)  icon.textContent  = '▶';
+      if (label) label.textContent = 'Geschichte anhören';
+    }
+
+    const audioEl = document.getElementById('audio-element');
+    audioEl.addEventListener('ended', resetPlayBtn);
+    audioEl.addEventListener('timeupdate', () => {
+      if (!audioEl.duration) return;
+      const pct = (audioEl.currentTime / audioEl.duration) * 100;
+      document.getElementById('audio-progress').style.width = pct + '%';
+    });
 
     const logoTexts = {
       kinder:   'VORLESEN.DE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FÜR 3-6 JAHRE KIDS',
