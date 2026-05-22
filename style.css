@@ -688,6 +688,9 @@ footer {
   color: #fff;
   padding: 56px 0 0;
 }
+footer.footer-kinder   { background: #ff9800; }
+footer.footer-vorleser { background: #1e88e5; }
+footer.footer-alle     { background: #43a047; }
 
 .footer-inner {
   display: flex;
