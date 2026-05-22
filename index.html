@@ -108,51 +108,101 @@
 
       <!-- Tab: Für Vorleser -->
       <div class="tab-content vorleser-content" id="tab-vorleser">
-        <div class="tab-intro">
-          <h2>Vorlesen macht Freude!</h2>
-          <p>Als Elternteil, Großelternteil oder Erzieherin bietet vorlesen.de alle Materialien die du brauchst, um Kindern die Welt der Geschichten zu öffnen.</p>
+
+        <!-- Vorleser Ebene 1: 3 Kacheln -->
+        <div id="vorleser-ebene1">
+          <div class="kategorie-grid vorleser-grid">
+            <div class="kategorie-card vorleser-card" onclick="zeigeVorleserBereich('tipps')">
+              <div class="kategorie-bild"><img src="images/vorlesetips.jpg" alt="Vorlesetipps" /></div>
+              <h3>VORLESETIPPS</h3>
+            </div>
+            <div class="kategorie-card vorleser-card" onclick="zeigeVorleserBereich('buecher')">
+              <div class="kategorie-bild"><img src="images/buchempfehlung.jpg" alt="Buchempfehlung" /></div>
+              <h3>BUCHEMPFEHLUNG</h3>
+            </div>
+            <div class="kategorie-card vorleser-card" onclick="zeigeVorleserBereich('generator')">
+              <div class="kategorie-bild"><img src="images/geschichtengenerator.jpg" alt="Geschichtengenerator" /></div>
+              <h3>GESCHICHTENGENERATOR</h3>
+            </div>
+          </div>
         </div>
-        <div class="photo-grid">
-          <div class="photo-card">
-            <div class="photo-wrap">
-              <img src="images/hero.jpg" alt="Vorlesen" />
-            </div>
-            <div class="photo-info">
-              <h3>Beruhigende Routine</h3>
-              <p>Vorlesen schafft feste Rituale, die Kindern Sicherheit und Geborgenheit geben. Eine gemeinsame Lesezeit stärkt die Bindung zwischen Eltern und Kindern.</p>
-              <a href="#" class="mehr-link">mehr erfahren →</a>
+
+        <!-- Vorleser Ebene 2: Inhalte -->
+        <div id="vorleser-ebene2" style="display:none;">
+          <div class="ebene2-header">
+            <button class="zurueck-btn" onclick="zeigeVorleserEbene1()">← Zurück</button>
+            <h2 class="ebene2-titel" id="vorleser-bereich-titel"></h2>
+          </div>
+
+          <!-- TIPPS -->
+          <div id="vorleser-tipps" style="display:none;">
+            <div class="vl-tipps-grid" id="vl-tipps-grid"></div>
+          </div>
+
+          <!-- BUCHEMPFEHLUNG -->
+          <div id="vorleser-buecher" style="display:none;">
+            <div class="vl-box">
+              <p class="vl-intro">Beschreibe kurz, was dein Kind mag — und du bekommst 5 passende Buchempfehlungen.</p>
+              <div class="vl-apikey-wrap">
+                <label class="vl-label">Claude API-Key <span class="vl-hint">(wird nicht gespeichert)</span></label>
+                <input id="buch-apikey" type="password" class="vl-input" placeholder="sk-ant-..." />
+              </div>
+              <div class="vl-field">
+                <label class="vl-label">Beschreibe dein Kind und seine Interessen</label>
+                <textarea id="buch-eingabe" class="vl-textarea" rows="3" placeholder='z.B. "Mein Kind ist 6 Jahre alt und liebt Tiere, besonders Hunde. Es hört gerne lustige Geschichten beim Einschlafen."'></textarea>
+              </div>
+              <div class="vl-beispiele-label">Beispiele — einfach klicken:</div>
+              <div class="vl-beispiele" id="vl-buch-beispiele"></div>
+              <button class="vl-btn" id="buch-suchen-btn" onclick="buchEmpfehlungSuchen()">🔍 Passende Bücher finden</button>
+              <div id="buch-error" class="vl-error" style="display:none;"></div>
+              <div id="buch-loading" style="display:none; text-align:center; padding:32px 0;">
+                <div class="vl-loading-emoji">📗 📘 📙 📕 📓</div>
+                <div class="vl-loading-text">Unsere KI durchsucht die Bücherwelt…</div>
+              </div>
+              <div id="buch-ergebnis"></div>
             </div>
           </div>
-          <div class="photo-card">
-            <div class="photo-wrap">
-              <img src="images/ritter.jpg" alt="Sprachentwicklung" />
-            </div>
-            <div class="photo-info">
-              <h3>Sprachentwicklung fördern</h3>
-              <p>Durch regelmäßiges Vorlesen erweitern Kinder spielend ihren Wortschatz und entwickeln ein tiefes Verständnis für Sprache und Geschichten.</p>
-              <a href="#" class="mehr-link">mehr erfahren →</a>
+
+          <!-- GESCHICHTENGENERATOR -->
+          <div id="vorleser-generator" style="display:none;">
+            <div class="vl-box">
+              <p class="vl-intro">Gib ein paar Details ein — und die KI schreibt eine maßgeschneiderte Geschichte für dein Kind.</p>
+              <div class="vl-apikey-wrap">
+                <label class="vl-label">Claude API-Key <span class="vl-hint">(wird nicht gespeichert)</span></label>
+                <input id="gen-apikey" type="password" class="vl-input" placeholder="sk-ant-..." />
+              </div>
+              <div class="vl-field">
+                <label class="vl-label">Hauptfigur(en) <span class="vl-hint">Name(n) eingeben</span></label>
+                <input id="gen-namen" class="vl-input" placeholder="z.B. Emma, ihr Hund Bello" />
+              </div>
+              <div class="vl-field">
+                <label class="vl-label">Grobe Handlung <span class="vl-hint">Worum soll es gehen?</span></label>
+                <textarea id="gen-handlung" class="vl-textarea" rows="3" placeholder="z.B. Emma verliert Bello im Wald und sucht ihn mit Hilfe eines sprechenden Eichhörnchens…"></textarea>
+              </div>
+              <div class="vl-pills-row">
+                <div class="vl-pills-group">
+                  <label class="vl-label">Alter des Kindes</label>
+                  <div class="vl-pills" id="gen-alter-pills"></div>
+                </div>
+                <div class="vl-pills-group">
+                  <label class="vl-label">Länge</label>
+                  <div class="vl-pills" id="gen-laenge-pills"></div>
+                </div>
+              </div>
+              <div class="vl-field">
+                <label class="vl-label">Stimmung</label>
+                <div class="vl-pills" id="gen-stimmung-pills"></div>
+              </div>
+              <button class="vl-btn" id="gen-btn" onclick="generiereGeschichte()">✍️ Geschichte schreiben lassen</button>
+              <div id="gen-error" class="vl-error" style="display:none;"></div>
+              <div id="gen-loading" style="display:none; text-align:center; padding:32px 0;">
+                <div style="font-size:3rem;">🪶</div>
+                <div class="vl-loading-text" id="gen-loading-msg">Die Geschichte wird geschrieben…</div>
+              </div>
+              <div id="gen-ergebnis"></div>
             </div>
           </div>
-          <div class="photo-card">
-            <div class="photo-wrap">
-              <img src="images/extra.jpg" alt="Materialien" />
-            </div>
-            <div class="photo-info">
-              <h3>Vorhandene Ressourcen</h3>
-              <p>Bestehende Materialien werden sinnvoll wiederverwendet und ergänzt — so sparst du Zeit und kannst dich ganz aufs Vorlesen konzentrieren.</p>
-              <a href="#" class="mehr-link">mehr erfahren →</a>
-            </div>
-          </div>
-          <div class="photo-card">
-            <div class="photo-wrap">
-              <img src="images/held.jpg" alt="Altersgruppen" />
-            </div>
-            <div class="photo-info">
-              <h3>Altersgerechtes Lernen</h3>
-              <p>Programme speziell optimiert für zwei Altersgruppen — genau das Richtige zur richtigen Zeit für jedes Kind.</p>
-              <a href="#" class="mehr-link">mehr erfahren →</a>
-            </div>
-          </div>
+
         </div>
       </div>
 
@@ -434,6 +484,230 @@
         document.querySelector('footer').className = 'footer-' + tab;
       });
     });
+
+    // ── VORLESER NAVIGATION ──────────────────────────────────────────────────
+
+    const TIPPS = [
+      { icon:'🎭', titel:'Eine Stimme pro Figur',           kurz:'Jede Figur klingt anders — das macht Zuhören magisch.', details:'Gib dem Bösewicht eine tiefe Stimme, der Maus eine piepsige und der weisen Eule ein bedächtiges Murmeln. Kinder merken sofort, wer spricht — und sind von Anfang bis Ende dabei.' },
+      { icon:'⏸️', titel:'Die Macht der Pause',             kurz:'Kurz innehalten — und Spannung entsteht wie von Zauberhand.', details:'Lies bis zu einer spannenden Stelle und halte dann kurz inne. Frage zwischendurch: „Was denkst du, was jetzt passiert?" Das trainiert die Vorstellungskraft und hält das Kind am Ball.' },
+      { icon:'🐢', titel:'Tempo variieren',                 kurz:'Langsam bei Spannung, schnell bei Aufregung.', details:'Lies ruhige Szenen langsam und genießerisch. Bei Verfolgungsjagden oder Überraschungen darf das Tempo steigen. Deine Stimme ist das Orchester — nutze sie.' },
+      { icon:'🛋️', titel:'Die richtige Umgebung',           kurz:'Gleicher Ort, gleiche Zeit — das Gehirn liebt Rituale.', details:'Immer an derselben Stelle zu lesen signalisiert dem Gehirn: Jetzt kommt etwas Schönes. Dimme das Licht leicht — das hilft beim Einschlafen und fokussiert die Aufmerksamkeit.' },
+      { icon:'📖', titel:'Schwierige Wörter erklären',       kurz:'Ein kurzes „das heißt…" reicht — und der Wortschatz wächst.', details:'Wenn ein unbekanntes Wort auftaucht, erkläre es in einem Satz: „Ein Archipel — das sind viele kleine Inseln zusammen." Dann liest du einfach weiter. Kein langer Exkurs nötig.' },
+      { icon:'🤗', titel:'Körpernähe',                      kurz:'Kind nah bei sich — das Vorlesen wird zur Umarmung.', details:'Lass das Kind auf deinem Schoß sitzen oder neben dir kuscheln. Die gemeinsame Wärme verbindet Vorlesen mit Geborgenheit — und genau das ist der Grund, warum Kinder Bücher später lieben.' },
+      { icon:'🌙', titel:'Das Abschluss-Ritual',            kurz:'Immer derselbe Satz am Ende — und das Kind schläft friedlich ein.', details:'Beende jede Vorleseeinheit mit demselben Satz, z.B. „Und nun schließen wir das Buch der Träume." Kinder lieben Vorhersehbarkeit — sie gibt Sicherheit.' },
+      { icon:'🎲', titel:'Geschichte gemeinsam erfinden',   kurz:'Manchmal ist kein Buch nötig — nur eure Fantasie.', details:'Starte eine Geschichte mit „Es war einmal…" und lass das Kind die nächste Zeile erfinden. Abwechselnd weiterspinnen. Das ist Vorlesen in seiner kreativsten Form.' },
+    ];
+
+    const BUCH_BEISPIELE = [
+      'Mein Kind ist 5 Jahre alt und liebt Tiere, besonders Hunde und Pferde.',
+      'Wir suchen spannende Abenteuergeschichten für einen 8-Jährigen, der Ritter und Drachen mag.',
+      'Meine Tochter (6) mag lustige Bücher mit Witzen und keine Gruselgeschichten.',
+      'Für eine 4-Jährige, die gerne einschläft beim Vorlesen — ruhig und sanft.',
+      'Unser Sohn (9) liest schon selbst, wir suchen Bücher über Freundschaft.',
+    ];
+
+    let aktiverTipp = null;
+
+    function zeigeVorleserBereich(bereich) {
+      document.getElementById('vorleser-ebene1').style.display = 'none';
+      document.getElementById('vorleser-ebene2').style.display = 'block';
+      ['tipps','buecher','generator'].forEach(b =>
+        document.getElementById('vorleser-' + b).style.display = 'none'
+      );
+      const titel = { tipps:'Vorlesetipps', buecher:'Buchempfehlung', generator:'Geschichtengenerator' };
+      document.getElementById('vorleser-bereich-titel').textContent = titel[bereich];
+      document.getElementById('vorleser-' + bereich).style.display = 'block';
+      if (bereich === 'tipps') renderTipps();
+      if (bereich === 'buecher') renderBuchBeispiele();
+      if (bereich === 'generator') renderGeneratorPills();
+      window.scrollTo(0,0);
+    }
+
+    function zeigeVorleserEbene1() {
+      document.getElementById('vorleser-ebene2').style.display = 'none';
+      document.getElementById('vorleser-ebene1').style.display = 'block';
+      window.scrollTo(0,0);
+    }
+
+    function renderTipps() {
+      const grid = document.getElementById('vl-tipps-grid');
+      grid.innerHTML = TIPPS.map((t,i) => `
+        <div class="vl-tipp-card ${aktiverTipp===i?'aktiv':''}" onclick="toggleTipp(${i})">
+          <div class="vl-tipp-icon">${t.icon}</div>
+          <div class="vl-tipp-titel">${t.titel}</div>
+          <div class="vl-tipp-text">${aktiverTipp===i ? t.details : t.kurz}</div>
+          <div class="vl-tipp-mehr">${aktiverTipp===i ? '▲ Einklappen' : '▼ Mehr lesen'}</div>
+        </div>`).join('');
+    }
+
+    function toggleTipp(i) {
+      aktiverTipp = aktiverTipp === i ? null : i;
+      renderTipps();
+    }
+
+    function renderBuchBeispiele() {
+      document.getElementById('vl-buch-beispiele').innerHTML = BUCH_BEISPIELE.map(b =>
+        `<button class="vl-beispiel-btn" onclick="buchBeispielKlick(this,'${b.replace(/'/g,"\\'")}')">${b.length>60?b.slice(0,57)+'…':b}</button>`
+      ).join('');
+    }
+
+    function buchBeispielKlick(btn, text) {
+      document.getElementById('buch-eingabe').value = text;
+      buchEmpfehlungSuchen(text);
+    }
+
+    async function buchEmpfehlungSuchen(vortext) {
+      const apiKey = document.getElementById('buch-apikey').value.trim();
+      const query  = (vortext || document.getElementById('buch-eingabe').value).trim();
+      const errEl  = document.getElementById('buch-error');
+      if (!apiKey) { errEl.textContent = 'Bitte gib deinen Claude API-Key ein.'; errEl.style.display='block'; return; }
+      if (!query)  { errEl.textContent = 'Bitte beschreibe kurz, was dein Kind mag.'; errEl.style.display='block'; return; }
+      errEl.style.display = 'none';
+      document.getElementById('buch-loading').style.display = 'block';
+      document.getElementById('buch-ergebnis').innerHTML = '';
+      document.getElementById('buch-suchen-btn').disabled = true;
+      const systemPrompt = `Du bist ein begeisterter Kinderbuch-Experte. Empfehle GENAU 5 Kinderbücher passend zur Beschreibung. Antworte NUR mit einem JSON-Array ohne Markdown. Format: [{"titel":"...","autor":"...","alter":"...","tags":["..."],"warum":"...","kurzbeschreibung":"...","schwierigkeit":"Vorlesen"}]. Für schwierigkeit: Vorlesen/Erstleser/Selbstlesen. Nur echte, existierende Bücher.`;
+      try {
+        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+          method:'POST',
+          headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+          body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1500,system:systemPrompt,messages:[{role:'user',content:query}]})
+        });
+        if (!resp.ok) throw new Error('API-Fehler ' + resp.status);
+        const data = await resp.json();
+        const raw  = data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+        const buecher = JSON.parse(raw.replace(/```json|```/g,'').trim());
+        renderBuchErgebnis(buecher);
+      } catch(err) {
+        errEl.textContent = 'Fehler: ' + err.message;
+        errEl.style.display = 'block';
+      } finally {
+        document.getElementById('buch-loading').style.display = 'none';
+        document.getElementById('buch-suchen-btn').disabled = false;
+      }
+    }
+
+    function renderBuchErgebnis(buecher) {
+      document.getElementById('buch-ergebnis').innerHTML = `
+        <div class="vl-ergebnis-header">
+          <span class="vl-ergebnis-count">${buecher.length} Empfehlungen</span>
+          <button class="vl-neu-btn" onclick="document.getElementById('buch-ergebnis').innerHTML='';document.getElementById('buch-eingabe').value=''">↺ Neue Suche</button>
+        </div>` +
+        buecher.map((b,i) => `
+          <div class="vl-buch-card" onclick="this.classList.toggle('aktiv')">
+            <div class="vl-buch-main">
+              <div class="vl-buch-nr">${i+1}</div>
+              <div class="vl-buch-info">
+                <div class="vl-buch-titel">${b.titel} <span class="vl-buch-autor">von ${b.autor}</span></div>
+                <div class="vl-buch-beschr">${b.kurzbeschreibung}</div>
+                <div class="vl-buch-tags">
+                  <span class="vl-tag">🎂 ${b.alter}</span>
+                  <span class="vl-tag">📖 ${b.schwierigkeit}</span>
+                  ${(b.tags||[]).map(t=>`<span class="vl-tag">${t}</span>`).join('')}
+                </div>
+              </div>
+              <span class="vl-toggle-icon">▼</span>
+            </div>
+            <div class="vl-buch-details">
+              <div class="vl-warum-label">Warum dieses Buch?</div>
+              <div class="vl-warum-text">${b.warum}</div>
+              <div class="vl-buch-links">
+                <a href="https://www.thalia.de/suche?sq=${encodeURIComponent(b.titel+' '+b.autor)}" target="_blank" class="vl-shop-btn vl-shop-dark" onclick="event.stopPropagation()">📦 Bei Thalia suchen</a>
+                <a href="https://www.amazon.de/s?k=${encodeURIComponent(b.titel+' '+b.autor)}" target="_blank" class="vl-shop-btn" onclick="event.stopPropagation()">🔎 Bei Amazon suchen</a>
+              </div>
+            </div>
+          </div>`).join('');
+    }
+
+    // ── GENERATOR ────────────────────────────────────────────────────────────
+    let genAlter = '5–7', genLaenge = 'kurz', genStimmung = 'spannend';
+    const LOADING_MSGS = ['Die Geschichte wird geschrieben…','Charaktere werden zum Leben erweckt…','Spannung wird aufgebaut…','Die Wörter finden ihren Platz…','Fast fertig — noch ein letzter Satz…'];
+
+    function renderGeneratorPills() {
+      renderPills('gen-alter-pills',   [{val:'2–4',label:'🐣 2–4 Jahre'},{val:'5–7',label:'🌱 5–7 Jahre'},{val:'8–10',label:'🌳 8–10 Jahre'}],     () => genAlter,    v => { genAlter=v; renderGeneratorPills(); });
+      renderPills('gen-laenge-pills',  [{val:'kurz',label:'Kurz ~350'},{val:'mittel',label:'Mittel ~700'},{val:'lang',label:'Lang ~1200'}],          () => genLaenge,   v => { genLaenge=v; renderGeneratorPills(); });
+      renderPills('gen-stimmung-pills',[{val:'spannend',label:'⚡ Spannend'},{val:'einschläfernd',label:'🌙 Einschläfernd'},{val:'lustig',label:'😄 Lustig'}], () => genStimmung, v => { genStimmung=v; renderGeneratorPills(); });
+    }
+
+    function renderPills(id, opts, getVal, setVal) {
+      document.getElementById(id).innerHTML = opts.map(o =>
+        `<button class="vl-pill ${getVal()===o.val?'aktiv':''}" onclick="(${setVal.toString()})(${JSON.stringify(o.val)})">${o.label}</button>`
+      ).join('');
+    }
+
+    async function generiereGeschichte() {
+      const apiKey  = document.getElementById('gen-apikey').value.trim();
+      const namen   = document.getElementById('gen-namen').value.trim();
+      const handlung= document.getElementById('gen-handlung').value.trim();
+      const errEl   = document.getElementById('gen-error');
+      if (!apiKey)   { errEl.textContent='Bitte gib deinen Claude API-Key ein.'; errEl.style.display='block'; return; }
+      if (!namen)    { errEl.textContent='Bitte gib mindestens einen Namen ein.'; errEl.style.display='block'; return; }
+      if (!handlung) { errEl.textContent='Bitte beschreibe kurz die Handlung.'; errEl.style.display='block'; return; }
+      errEl.style.display='none';
+      document.getElementById('gen-loading').style.display='block';
+      document.getElementById('gen-ergebnis').innerHTML='';
+      document.getElementById('gen-btn').disabled=true;
+      const wordMap={kurz:350,mittel:700,lang:1200};
+      const alterText={'2–4':'sehr einfache Wörter, kurze Sätze, viele Lautmalereien','5–7':'einfache Wörter, mittellange Sätze, lebhafte Beschreibungen','8–10':'reicherer Wortschatz, komplexere Sätze, mehr Tiefe'};
+      const stimmungText={spannend:'spannend mit Aufbau, Wendung und Höhepunkt',einschläfernd:'ruhig und sanft, kein großer Konflikt, beruhigendes Ende',lustig:'lustig mit witzigen Situationen und komischen Missverständnissen'};
+      let idx=0; const loadEl=document.getElementById('gen-loading-msg');
+      const interval=setInterval(()=>{ idx=(idx+1)%LOADING_MSGS.length; loadEl.textContent=LOADING_MSGS[idx]; },2500);
+      try {
+        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+          method:'POST',
+          headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+          body:JSON.stringify({
+            model:'claude-sonnet-4-5', max_tokens:2000,
+            system:`Du bist ein Kinderbuchautor. Schreibe IMMER auf Deutsch. Beginne direkt mit der Geschichte. Gib ihr einen kreativen Titel in der ersten Zeile, gefolgt von einer Leerzeile. Ca. ${wordMap[genLaenge]} Wörter. Alter ${genAlter}: ${alterText[genAlter]}. Stimmung: ${stimmungText[genStimmung]}. Absätze mit Leerzeilen trennen. Kein Markdown.`,
+            messages:[{role:'user',content:`Hauptfigur(en): ${namen}\nHandlung: ${handlung}`}]
+          })
+        });
+        clearInterval(interval);
+        if (!resp.ok) throw new Error('API-Fehler: ' + resp.status);
+        const data=await resp.json();
+        const text=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+        const lines=text.trim().split('\n');
+        const title=lines[0].replace(/^#+\s*/,'').trim();
+        const body=lines.slice(1).join('\n').trim();
+        renderGenErgebnis(title, body, namen);
+      } catch(err) {
+        clearInterval(interval);
+        errEl.textContent='Fehler: '+err.message; errEl.style.display='block';
+      } finally {
+        document.getElementById('gen-loading').style.display='none';
+        document.getElementById('gen-btn').disabled=false;
+      }
+    }
+
+    function renderGenErgebnis(title, body, namen) {
+      const absaetze = body.split('\n\n').filter(Boolean).map(p=>`<p class="vl-story-para">${p.trim()}</p>`).join('');
+      document.getElementById('gen-ergebnis').innerHTML = `
+        <div class="vl-story-card">
+          <div class="vl-story-header">
+            <span class="vl-story-tag">👤 ${namen}</span>
+            <span class="vl-story-tag">${genAlter} Jahre</span>
+            <span class="vl-story-tag">${genStimmung}</span>
+            <div class="vl-story-titel">${title}</div>
+          </div>
+          <div class="vl-story-body">${absaetze}</div>
+          <div class="vl-story-actions">
+            <button class="vl-action-btn vl-action-primary" onclick="vorlesen('${title.replace(/'/g,"\\'")}', \`${body.replace(/`/g,'\\`')}\`)">🔊 Vorlesen</button>
+            <button class="vl-action-btn" onclick="kopieren('${title.replace(/'/g,"\\'")}', \`${body.replace(/`/g,'\\`')}\`)">📋 Kopieren</button>
+            <button class="vl-action-btn" onclick="document.getElementById('gen-ergebnis').innerHTML='';document.getElementById('gen-namen').value='';document.getElementById('gen-handlung').value=''">🔄 Neue Geschichte</button>
+          </div>
+        </div>`;
+    }
+
+    function vorlesen(title, body) {
+      if (window.speechSynthesis.speaking) { window.speechSynthesis.cancel(); return; }
+      const utt = new SpeechSynthesisUtterance(title + '. ' + body);
+      utt.lang='de-DE'; utt.rate=0.9;
+      window.speechSynthesis.speak(utt);
+    }
+
+    function kopieren(title, body) {
+      navigator.clipboard.writeText(title + '\n\n' + body);
+    }
   </script>
 
 </body>
