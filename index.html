@@ -168,6 +168,8 @@
           <div id="vorleser-generator" style="display:none;">
             <div class="vl-box">
               <p class="vl-intro">Gib ein paar Details ein — und die KI schreibt eine maßgeschneiderte Geschichte für dein Kind.</p>
+              <div class="vl-beispiele-label">Beispiele — einfach klicken:</div>
+              <div class="vl-beispiele" id="vl-gen-beispiele"></div>
               <div class="vl-field">
                 <label class="vl-label">Hauptfigur(en) <span class="vl-hint">Name(n) eingeben</span></label>
                 <input id="gen-namen" class="vl-input" placeholder="z.B. Emma, ihr Hund Bello" />
@@ -516,7 +518,7 @@
       document.getElementById('vorleser-' + bereich).style.display = 'block';
       if (bereich === 'tipps') renderTipps();
       if (bereich === 'buecher') renderBuchBeispiele();
-      if (bereich === 'generator') renderGeneratorPills();
+      if (bereich === 'generator') { renderGenBeispiele(); renderGeneratorPills(); }
       window.scrollTo(0,0);
     }
 
@@ -645,8 +647,32 @@
     }
 
     // ── GENERATOR ────────────────────────────────────────────────────────────
+    const GEN_BEISPIELE = [
+      { label: '🐉 Drachen-Abenteuer',   namen: 'Leon',           handlung: 'Leon findet ein Drachenei im Wald und muss das Drachenbaby vor bösen Rittern retten.',           alter: '5–7',  laenge: 'mittel', stimmung: 'spannend' },
+      { label: '🌙 Gute-Nacht-Geschichte', namen: 'Mia, ihr Teddybär Bello', handlung: 'Mia kann nicht schlafen und Bello erzählt ihr von einem magischen Land aus Wolken und Sternen.', alter: '2–4',  laenge: 'kurz',   stimmung: 'einschläfernd' },
+      { label: '😄 Lustige Tiere',        namen: 'Kuh Klara',      handlung: 'Klara verliert ihr Muhen und sucht es überall auf dem Bauernhof — mit komischen Folgen für alle Tiere.', alter: '5–7',  laenge: 'kurz',   stimmung: 'lustig' },
+      { label: '🧙 Zauberwald',           namen: 'Sophie und ihr Bruder Felix', handlung: 'Im alten Zauberwald entdecken die Geschwister eine sprechende Eule, die ihnen einen verborgenen Schatz zeigt.', alter: '8–10', laenge: 'lang',   stimmung: 'spannend' },
+      { label: '🚀 Weltraum-Reise',       namen: 'Tim',            handlung: 'Tim baut aus Pappkartons ein Raumschiff — und fliegt plötzlich wirklich zum Mond, wo kleine blaue Mondmäuse wohnen.', alter: '5–7',  laenge: 'mittel', stimmung: 'lustig' },
+    ];
+
     let genAlter = '5–7', genLaenge = 'kurz', genStimmung = 'spannend';
     const LOADING_MSGS = ['Die Geschichte wird geschrieben…','Charaktere werden zum Leben erweckt…','Spannung wird aufgebaut…','Die Wörter finden ihren Platz…','Fast fertig — noch ein letzter Satz…'];
+
+    function renderGenBeispiele() {
+      document.getElementById('vl-gen-beispiele').innerHTML = GEN_BEISPIELE.map((b, i) =>
+        `<button class="vl-beispiel-btn" onclick="genBeispielKlick(${i})">${b.label}</button>`
+      ).join('');
+    }
+
+    function genBeispielKlick(i) {
+      const b = GEN_BEISPIELE[i];
+      document.getElementById('gen-namen').value    = b.namen;
+      document.getElementById('gen-handlung').value = b.handlung;
+      genAlter    = b.alter;
+      genLaenge   = b.laenge;
+      genStimmung = b.stimmung;
+      renderGeneratorPills();
+    }
 
     function renderGeneratorPills() {
       renderPills('gen-alter-pills',   [{val:'2–4',label:'🐣 2–4 Jahre'},{val:'5–7',label:'🌱 5–7 Jahre'},{val:'8–10',label:'🌳 8–10 Jahre'}],     () => genAlter,    v => { genAlter=v; renderGeneratorPills(); });
