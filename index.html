@@ -151,9 +151,14 @@
               <div class="vl-beispiele" id="vl-buch-beispiele"></div>
               <button class="vl-btn" id="buch-suchen-btn" onclick="buchEmpfehlungSuchen()">🔍 Passende Bücher finden</button>
               <div id="buch-error" class="vl-error" style="display:none;"></div>
-              <div id="buch-loading" style="display:none; text-align:center; padding:32px 0;">
-                <div class="vl-loading-emoji">📗 📘 📙 📕 📓</div>
-                <div class="vl-loading-text">Unsere KI durchsucht die Bücherwelt…</div>
+              <div id="buch-loading" style="display:none;">
+                <div class="vl-loading-box">
+                  <div class="vl-loading-books">
+                    <span>📗</span><span>📘</span><span>📙</span><span>📕</span><span>📓</span>
+                  </div>
+                  <div class="vl-loading-bar-wrap"><div class="vl-loading-bar"></div></div>
+                  <div class="vl-loading-msg" id="buch-loading-msg">Unsere KI durchsucht die Bücherwelt…</div>
+                </div>
               </div>
               <div id="buch-ergebnis"></div>
             </div>
@@ -548,14 +553,38 @@
       buchEmpfehlungSuchen(text);
     }
 
+    const BUCH_LOADING_MSGS = [
+      'Unsere KI durchsucht die Bücherwelt…',
+      'Passende Geschichten werden gesucht…',
+      'Altersgerechte Bücher werden gefunden…',
+      'Fast fertig — noch ein paar Seiten…',
+      'Die besten Empfehlungen werden ausgewählt…',
+    ];
+    let buchLoadingInterval = null;
+
+    function startBuchLoading() {
+      let idx = 0;
+      const el = document.getElementById('buch-loading-msg');
+      document.getElementById('buch-loading').style.display = 'block';
+      buchLoadingInterval = setInterval(() => {
+        idx = (idx + 1) % BUCH_LOADING_MSGS.length;
+        el.textContent = BUCH_LOADING_MSGS[idx];
+      }, 2500);
+    }
+
+    function stopBuchLoading() {
+      clearInterval(buchLoadingInterval);
+      document.getElementById('buch-loading').style.display = 'none';
+    }
+
     async function buchEmpfehlungSuchen(vortext) {
       const query  = (vortext || document.getElementById('buch-eingabe').value).trim();
       const errEl  = document.getElementById('buch-error');
       if (!query)  { errEl.textContent = 'Bitte beschreibe kurz, was dein Kind mag.'; errEl.style.display='block'; return; }
       errEl.style.display = 'none';
-      document.getElementById('buch-loading').style.display = 'block';
       document.getElementById('buch-ergebnis').innerHTML = '';
       document.getElementById('buch-suchen-btn').disabled = true;
+      startBuchLoading();
       const systemPrompt = `Du bist ein begeisterter Kinderbuch-Experte. Empfehle GENAU 5 Kinderbücher passend zur Beschreibung. Antworte NUR mit einem JSON-Array ohne Markdown. Format: [{"titel":"...","autor":"...","alter":"...","tags":["..."],"warum":"...","kurzbeschreibung":"...","schwierigkeit":"Vorlesen"}]. Für schwierigkeit: Vorlesen/Erstleser/Selbstlesen. Nur echte, existierende Bücher.`;
       try {
         const resp = await fetch('/api/claude', {
@@ -578,7 +607,7 @@
         errEl.textContent = 'Fehler: ' + err.message;
         errEl.style.display = 'block';
       } finally {
-        document.getElementById('buch-loading').style.display = 'none';
+        stopBuchLoading();
         document.getElementById('buch-suchen-btn').disabled = false;
       }
     }
