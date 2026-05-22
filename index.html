@@ -143,10 +143,6 @@
           <div id="vorleser-buecher" style="display:none;">
             <div class="vl-box">
               <p class="vl-intro">Beschreibe kurz, was dein Kind mag — und du bekommst 5 passende Buchempfehlungen.</p>
-              <div class="vl-apikey-wrap">
-                <label class="vl-label">Claude API-Key <span class="vl-hint">(wird nicht gespeichert)</span></label>
-                <input id="buch-apikey" type="password" class="vl-input" placeholder="sk-ant-..." />
-              </div>
               <div class="vl-field">
                 <label class="vl-label">Beschreibe dein Kind und seine Interessen</label>
                 <textarea id="buch-eingabe" class="vl-textarea" rows="3" placeholder='z.B. "Mein Kind ist 6 Jahre alt und liebt Tiere, besonders Hunde. Es hört gerne lustige Geschichten beim Einschlafen."'></textarea>
@@ -167,10 +163,6 @@
           <div id="vorleser-generator" style="display:none;">
             <div class="vl-box">
               <p class="vl-intro">Gib ein paar Details ein — und die KI schreibt eine maßgeschneiderte Geschichte für dein Kind.</p>
-              <div class="vl-apikey-wrap">
-                <label class="vl-label">Claude API-Key <span class="vl-hint">(wird nicht gespeichert)</span></label>
-                <input id="gen-apikey" type="password" class="vl-input" placeholder="sk-ant-..." />
-              </div>
               <div class="vl-field">
                 <label class="vl-label">Hauptfigur(en) <span class="vl-hint">Name(n) eingeben</span></label>
                 <input id="gen-namen" class="vl-input" placeholder="z.B. Emma, ihr Hund Bello" />
@@ -557,10 +549,8 @@
     }
 
     async function buchEmpfehlungSuchen(vortext) {
-      const apiKey = document.getElementById('buch-apikey').value.trim();
       const query  = (vortext || document.getElementById('buch-eingabe').value).trim();
       const errEl  = document.getElementById('buch-error');
-      if (!apiKey) { errEl.textContent = 'Bitte gib deinen Claude API-Key ein.'; errEl.style.display='block'; return; }
       if (!query)  { errEl.textContent = 'Bitte beschreibe kurz, was dein Kind mag.'; errEl.style.display='block'; return; }
       errEl.style.display = 'none';
       document.getElementById('buch-loading').style.display = 'block';
@@ -568,9 +558,9 @@
       document.getElementById('buch-suchen-btn').disabled = true;
       const systemPrompt = `Du bist ein begeisterter Kinderbuch-Experte. Empfehle GENAU 5 Kinderbücher passend zur Beschreibung. Antworte NUR mit einem JSON-Array ohne Markdown. Format: [{"titel":"...","autor":"...","alter":"...","tags":["..."],"warum":"...","kurzbeschreibung":"...","schwierigkeit":"Vorlesen"}]. Für schwierigkeit: Vorlesen/Erstleser/Selbstlesen. Nur echte, existierende Bücher.`;
       try {
-        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        const resp = await fetch('/api/claude', {
           method:'POST',
-          headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+          headers:{'Content-Type':'application/json'},
           body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1500,system:systemPrompt,messages:[{role:'user',content:query}]})
         });
         if (!resp.ok) throw new Error('API-Fehler ' + resp.status);
@@ -636,11 +626,9 @@
     }
 
     async function generiereGeschichte() {
-      const apiKey  = document.getElementById('gen-apikey').value.trim();
       const namen   = document.getElementById('gen-namen').value.trim();
       const handlung= document.getElementById('gen-handlung').value.trim();
       const errEl   = document.getElementById('gen-error');
-      if (!apiKey)   { errEl.textContent='Bitte gib deinen Claude API-Key ein.'; errEl.style.display='block'; return; }
       if (!namen)    { errEl.textContent='Bitte gib mindestens einen Namen ein.'; errEl.style.display='block'; return; }
       if (!handlung) { errEl.textContent='Bitte beschreibe kurz die Handlung.'; errEl.style.display='block'; return; }
       errEl.style.display='none';
@@ -653,9 +641,9 @@
       let idx=0; const loadEl=document.getElementById('gen-loading-msg');
       const interval=setInterval(()=>{ idx=(idx+1)%LOADING_MSGS.length; loadEl.textContent=LOADING_MSGS[idx]; },2500);
       try {
-        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        const resp = await fetch('/api/claude', {
           method:'POST',
-          headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+          headers:{'Content-Type':'application/json'},
           body:JSON.stringify({
             model:'claude-sonnet-4-5', max_tokens:2000,
             system:`Du bist ein Kinderbuchautor. Schreibe IMMER auf Deutsch. Beginne direkt mit der Geschichte. Gib ihr einen kreativen Titel in der ersten Zeile, gefolgt von einer Leerzeile. Ca. ${wordMap[genLaenge]} Wörter. Alter ${genAlter}: ${alterText[genAlter]}. Stimmung: ${stimmungText[genStimmung]}. Absätze mit Leerzeilen trennen. Kein Markdown.`,
