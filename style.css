@@ -694,10 +694,10 @@ footer.footer-alle     { background: #43a047; }
 
 /* ── VORLESER KACHELN ──────────────────────────────────────────────── */
 .vorleser-grid { grid-template-columns: repeat(3, 1fr); }
-.vorleser-card { background: #eff6ff; }
-.vorleser-card .kategorie-bild { background: #dbeafe; }
-.vorleser-card h3 { color: var(--blue-dark); }
-.vorleser-card:hover { box-shadow: 0 8px 32px rgba(37,99,235,0.18); }
+.kategorie-card.vorleser-card { background: #eff6ff; }
+.kategorie-card.vorleser-card .kategorie-bild { background: #dbeafe; }
+.kategorie-card.vorleser-card h3 { color: var(--blue-dark); }
+.kategorie-card.vorleser-card:hover { box-shadow: 0 8px 32px rgba(37,99,235,0.18); }
 
 /* ── VORLESER DETAIL-INHALTE ───────────────────────────────────────── */
 .vl-tipps-grid {
