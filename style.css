@@ -684,8 +684,8 @@ body {
 
 /* FOOTER */
 footer {
-  background: #1a1a2e;
-  color: #9ca3af;
+  background: #ff9800;
+  color: #fff;
   padding: 56px 0 0;
 }
 
@@ -696,23 +696,24 @@ footer {
   margin-bottom: 48px;
 }
 
-.footer-brand .logo { color: var(--orange); font-size: 1.2rem; display: block; margin-bottom: 10px; }
+.footer-brand .logo { color: #fff; font-size: 1.2rem; display: block; margin-bottom: 10px; }
 .footer-brand p { font-size: 0.9rem; line-height: 1.8; }
 
 .footer-links, .footer-social { display: flex; flex-direction: column; gap: 10px; }
 .footer-links a, .footer-social a {
-  color: #9ca3af;
+  color: rgba(255,255,255,0.85);
   text-decoration: none;
   font-size: 0.95rem;
   transition: color 0.2s;
 }
-.footer-links a:hover, .footer-social a:hover { color: var(--orange); }
+.footer-links a:hover, .footer-social a:hover { color: #fff; }
 
 .footer-bottom {
-  border-top: 1px solid #2d2d44;
+  border-top: 1px solid rgba(255,255,255,0.3);
   text-align: center;
   padding: 20px;
   font-size: 0.85rem;
+  color: rgba(255,255,255,0.8);
 }
 
 /* RESPONSIVE */
