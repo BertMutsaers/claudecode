@@ -565,9 +565,15 @@
         });
         if (!resp.ok) throw new Error('API-Fehler ' + resp.status);
         const data = await resp.json();
+        if (!data.content) throw new Error('Keine Antwort vom Server');
         const raw  = data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
-        const buecher = JSON.parse(raw.replace(/```json|```/g,'').trim());
+        const clean = raw.replace(/```json/g,'').replace(/```/g,'').trim();
+        let buecher;
+        try { buecher = JSON.parse(clean); }
+        catch(e) { throw new Error('Antwort konnte nicht gelesen werden: ' + e.message); }
+        if (!Array.isArray(buecher)) throw new Error('Unerwartetes Antwortformat');
         renderBuchErgebnis(buecher);
+        document.getElementById('buch-ergebnis').scrollIntoView({ behavior: 'smooth' });
       } catch(err) {
         errEl.textContent = 'Fehler: ' + err.message;
         errEl.style.display = 'block';
