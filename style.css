@@ -464,7 +464,42 @@ body {
   align-items: center;
   gap: 20px;
   padding: 24px 0 20px;
+  position: relative;
 }
+
+.share-btn {
+  margin-left: auto;
+  background: none;
+  border: 2px solid var(--orange);
+  color: var(--orange);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+.share-btn:hover { background: var(--orange); color: #fff; }
+
+.share-toast {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: #333;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 20px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 100;
+}
+.share-toast.visible { opacity: 1; }
 
 .ebene3-titel {
   font-size: 1.6rem;

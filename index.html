@@ -81,6 +81,10 @@
           <div class="ebene3-header">
             <button class="zurueck-btn" onclick="zeigeEbene2Zurueck()">← Zurück</button>
             <h2 class="ebene3-titel" id="ebene3-titel"></h2>
+            <button class="share-btn" id="share-btn" onclick="teileGeschichte()" title="Geschichte teilen">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+            <div class="share-toast" id="share-toast">Link kopiert! 📋</div>
           </div>
           <div class="ebene3-inhalt">
             <div class="ebene3-bild-wrap">
@@ -509,7 +513,25 @@
         .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
         .join('');
       document.getElementById('ebene3-text').innerHTML = absaetze;
+
+      // URL-Hash setzen damit die Geschichte direkt verlinkt werden kann
+      history.replaceState(null, '', '#story=' + encodeURIComponent(titel));
+
       window.scrollTo(0, 0);
+    }
+
+    function teileGeschichte() {
+      const titel = document.getElementById('ebene3-titel').textContent;
+      const url = location.origin + location.pathname + '#story=' + encodeURIComponent(titel);
+      if (navigator.share) {
+        navigator.share({ title: titel + ' – vorlesen.de', text: '📖 Hör dir diese Geschichte an: ' + titel, url });
+      } else {
+        navigator.clipboard.writeText(url).then(() => {
+          const toast = document.getElementById('share-toast');
+          toast.classList.add('visible');
+          setTimeout(() => toast.classList.remove('visible'), 2500);
+        });
+      }
     }
 
     function zeigeEbene2Zurueck() {
@@ -889,6 +911,32 @@
     function kopieren(title, body) {
       navigator.clipboard.writeText(title + '\n\n' + body);
     }
+
+    // Direkt-Link: beim Laden prüfen ob #story=... in der URL steht
+    (function() {
+      const hash = decodeURIComponent(location.hash);
+      const match = hash.match(/^#story=(.+)$/);
+      if (!match) return;
+      const titel = match[1];
+      // Alle Kategorien durchsuchen
+      const alle = typeof kategorien !== 'undefined' ? kategorien : [];
+      for (const kat of alle) {
+        const story = kat.geschichten && kat.geschichten.find(g => g.titel === titel);
+        if (story) {
+          // Kinder-Tab aktivieren
+          document.querySelectorAll('.top-tab').forEach(b => b.classList.remove('active'));
+          document.querySelector('[data-tab="kinder"]').classList.add('active');
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          document.getElementById('tab-kinder').classList.add('active');
+          // Ebene 2 vorbereiten
+          document.getElementById('ebene2-titel').textContent = kat.name;
+          aktuelleKategorie = kat.name;
+          // Direkt zu Ebene 3
+          zeigeEbene3(story.titel, story.bild, story.audio);
+          return;
+        }
+      }
+    })();
   </script>
 
 </body>
