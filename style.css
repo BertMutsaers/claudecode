@@ -992,3 +992,234 @@ footer.footer-alle     { background: #43a047; }
   .tab-btn { padding: 16px; }
   .tab-btn .tab-icon { font-size: 26px; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   FÜR ALLE — Seiteninhalt
+══════════════════════════════════════════════════════════ */
+
+.fa-section {
+  padding: 40px 0 32px;
+  border-bottom: 1px solid #bbf7d0;
+}
+.fa-section-last { border-bottom: none; padding-bottom: 48px; }
+
+.fa-section-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 10px;
+}
+.fa-section-title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--green-dark);
+  margin-bottom: 6px;
+}
+.fa-section-intro {
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* ── Über mich ── */
+.fa-about {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
+.fa-about-foto-wrap {
+  flex-shrink: 0;
+}
+.fa-about-foto {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--green);
+  box-shadow: 0 6px 24px rgba(22,163,74,0.2);
+  display: block;
+  background: #dcfce7;
+}
+.fa-about-text {
+  flex: 1;
+  min-width: 220px;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #334155;
+}
+.fa-about-text strong { color: var(--green-dark); }
+
+/* ── Fakten-Kacheln ── */
+.fa-fakten-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.fa-fakt-card {
+  background: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 20px;
+  padding: 24px 16px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.fa-fakt-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(22,163,74,0.15);
+}
+.fa-fakt-icon { font-size: 2.2rem; margin-bottom: 10px; }
+.fa-fakt-zahl {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--green-dark);
+  margin-bottom: 6px;
+  line-height: 1.1;
+}
+.fa-fakt-text {
+  font-size: 0.82rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+/* ── Einreichen ── */
+.fa-einreich-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.fa-einreich-card {
+  background: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.fa-einreich-bild-wrap {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: #dcfce7;
+}
+.fa-einreich-bild-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.fa-einreich-titel {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--green-dark);
+  padding: 18px 20px 8px;
+}
+.fa-einreich-text {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.65;
+  padding: 0 20px 12px;
+  flex: 1;
+}
+.fa-einreich-hinweis {
+  background: #dcfce7;
+  font-size: 0.82rem;
+  color: #374151;
+  padding: 10px 20px;
+  line-height: 1.6;
+}
+.fa-optional { color: #6b7280; }
+.fa-einreich-btn {
+  display: block;
+  background: var(--green);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+  line-height: 1.5;
+  transition: background 0.2s;
+}
+.fa-einreich-btn span { font-size: 0.78rem; opacity: 0.85; font-weight: 400; }
+.fa-einreich-btn:hover { background: var(--green-dark); }
+
+.fa-hinweisbox {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  border-radius: 14px;
+  padding: 14px 20px;
+  font-size: 0.88rem;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* ── Community ── */
+.fa-community {
+  display: flex;
+  gap: 36px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.fa-community-bild-wrap {
+  flex-shrink: 0;
+  width: 220px;
+  height: 220px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #dcfce7;
+}
+.fa-community-bild-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.fa-community-text {
+  flex: 1;
+  min-width: 220px;
+}
+.fa-community-text p {
+  font-size: 1rem;
+  color: #334155;
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+.fa-whatsapp-btn {
+  display: inline-block;
+  background: #25d366;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.05rem;
+  padding: 16px 28px;
+  border-radius: 60px;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(37,211,102,0.35);
+  transition: background 0.2s, transform 0.15s;
+  margin-bottom: 14px;
+  display: block;
+  text-align: center;
+}
+.fa-whatsapp-btn:hover { background: #1da851; transform: translateY(-2px); }
+.fa-community-sub {
+  font-size: 0.82rem;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .fa-fakten-grid    { grid-template-columns: 1fr 1fr; }
+  .fa-einreich-grid  { grid-template-columns: 1fr; }
+  .fa-about          { flex-direction: column; text-align: center; }
+  .fa-community      { flex-direction: column; }
+  .fa-community-bild-wrap { width: 100%; height: 200px; }
+}
+@media (max-width: 480px) {
+  .fa-fakten-grid { grid-template-columns: 1fr 1fr; }
+}
