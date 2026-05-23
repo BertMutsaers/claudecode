@@ -289,6 +289,7 @@
         </div>
 
         <!-- SECTION 3: Gemeinschaft -->
+
         <div class="fa-section fa-section-last">
           <div class="fa-section-label">✦ Community</div>
           <h2 class="fa-section-title">Komm in unsere Gemeinschaft</h2>
@@ -303,6 +304,59 @@
                 💬 Jetzt der WhatsApp-Community beitreten →
               </a>
               <div class="fa-community-sub">Kostenlos · Jederzeit kündbar · Nur nette Menschen 😊</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: Impressum & Kontakt -->
+        <div class="fa-section fa-section-last" id="fa-impressum" style="display:none;">
+          <div class="fa-section-label">✦ Rechtliches</div>
+          <h2 class="fa-section-title">Impressum & Kontakt</h2>
+
+          <div class="fa-impressum-grid">
+            <div class="fa-imp-block">
+              <h3 class="fa-imp-h3">Angaben gemäß § 5 TMG</h3>
+              <p>Realum.cloud GmbH<br />Heger Tor Wall 26<br />49078 Osnabrück</p>
+
+              <h3 class="fa-imp-h3">Vertreten durch</h3>
+              <p>Bert Mutsaers (Geschäftsführer)</p>
+
+              <h3 class="fa-imp-h3">Registereintrag</h3>
+              <p>Registergericht: Amtsgericht Osnabrück<br />Handelsregisternummer: HRB 201025</p>
+
+              <h3 class="fa-imp-h3">Haftung für Inhalte</h3>
+              <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte verantwortlich. Nach §§ 8–10 TMG sind wir nicht verpflichtet, übermittelte fremde Informationen zu überwachen. Bei Bekanntwerden von Rechtsverletzungen entfernen wir derartige Inhalte umgehend.</p>
+
+              <h3 class="fa-imp-h3">Haftung für Links</h3>
+              <p>Für die Inhalte verlinkter Seiten ist stets der jeweilige Anbieter verantwortlich. Bei Bekanntwerden von Rechtsverletzungen werden derartige Links umgehend entfernt.</p>
+
+              <h3 class="fa-imp-h3">Urheberrecht</h3>
+              <p>Die erstellten Inhalte unterliegen dem deutschen Urheberrecht. Vervielfältigung oder Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung.</p>
+
+              <h3 class="fa-imp-h3">Streitschlichtung</h3>
+              <p>Wir nehmen nicht an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teil.</p>
+            </div>
+
+            <div class="fa-imp-block">
+              <h3 class="fa-imp-h3">Schreib uns</h3>
+              <p style="margin-bottom:20px; color:#475569;">Du hast eine Frage oder möchtest uns etwas mitteilen? Wir freuen uns über deine Nachricht.</p>
+              <form class="fa-kontakt-form" onsubmit="sendKontakt(event)">
+                <div class="fa-kf-field">
+                  <label class="fa-kf-label">Dein Name</label>
+                  <input id="kf-name" class="fa-kf-input" type="text" placeholder="Vorname Nachname" required />
+                </div>
+                <div class="fa-kf-field">
+                  <label class="fa-kf-label">Deine E-Mail</label>
+                  <input id="kf-email" class="fa-kf-input" type="email" placeholder="deine@email.de" required />
+                </div>
+                <div class="fa-kf-field">
+                  <label class="fa-kf-label">Nachricht</label>
+                  <textarea id="kf-nachricht" class="fa-kf-textarea" rows="5" placeholder="Deine Nachricht…" required></textarea>
+                </div>
+                <button type="submit" class="fa-kf-btn">✉️ Nachricht senden</button>
+                <div id="kf-success" class="fa-kf-success" style="display:none;">✅ Danke! Deine Nachricht wurde gesendet.</div>
+                <div id="kf-error" class="fa-kf-ferror" style="display:none;">❌ Fehler beim Senden. Bitte versuche es erneut.</div>
+              </form>
             </div>
           </div>
         </div>
@@ -322,9 +376,8 @@
         <p>Ein Angebot der Realum.cloud GmbH<br />Osnabrück, Deutschland</p>
       </div>
       <div class="footer-links">
-        <a href="#">Über uns</a>
-        <a href="#">Kontakt</a>
-        <a href="#">Impressum</a>
+        <a href="#" onclick="zeigeImpressum(); return false;">Kontakt</a>
+        <a href="#" onclick="zeigeImpressum(); return false;">Impressum</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -799,6 +852,38 @@
             <button class="vl-action-btn" onclick="document.getElementById('gen-ergebnis').innerHTML='';document.getElementById('gen-namen').value='';document.getElementById('gen-handlung').value=''">🔄 Neue Geschichte</button>
           </div>
         </div>`;
+    }
+
+    function zeigeImpressum() {
+      // Zu "Für Alle" Tab wechseln
+      topTabs.forEach(b => b.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      const alleTab = document.querySelector('[data-tab="alle"]');
+      alleTab.classList.add('active');
+      document.getElementById('tab-alle').classList.add('active');
+      header.className = 'site-header alle-header';
+      tabBar.className = 'top-tab-bar alle-bg';
+      logo.textContent = logoTexts['alle'];
+      document.querySelector('footer').className = 'footer-alle';
+      // Impressum einblenden, scrollen
+      document.getElementById('fa-impressum').style.display = 'block';
+      setTimeout(() => document.getElementById('fa-impressum').scrollIntoView({ behavior: 'smooth' }), 100);
+    }
+
+    async function sendKontakt(e) {
+      e.preventDefault();
+      const name     = document.getElementById('kf-name').value.trim();
+      const email    = document.getElementById('kf-email').value.trim();
+      const nachricht= document.getElementById('kf-nachricht').value.trim();
+      const success  = document.getElementById('kf-success');
+      const errEl    = document.getElementById('kf-error');
+      success.style.display = 'none';
+      errEl.style.display   = 'none';
+      // mailto-Fallback (kein Backend nötig)
+      const subject  = encodeURIComponent('Nachricht von ' + name + ' via vorlesen.de');
+      const body     = encodeURIComponent('Name: ' + name + '\nE-Mail: ' + email + '\n\n' + nachricht);
+      window.location.href = `mailto:info@vorlesen.de?subject=${subject}&body=${body}`;
+      success.style.display = 'block';
     }
 
     function vorlesen(title, body) {

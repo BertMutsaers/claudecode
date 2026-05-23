@@ -1223,3 +1223,87 @@ footer.footer-alle     { background: #43a047; }
 @media (max-width: 480px) {
   .fa-fakten-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* ── Impressum & Kontakt ── */
+.fa-impressum-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 24px;
+}
+.fa-imp-block {}
+.fa-imp-h3 {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--green-dark);
+  margin: 22px 0 6px;
+}
+.fa-imp-h3:first-child { margin-top: 0; }
+.fa-imp-block p {
+  font-size: 0.92rem;
+  color: #475569;
+  line-height: 1.75;
+}
+
+/* Kontaktformular */
+.fa-kontakt-form { display: flex; flex-direction: column; gap: 14px; }
+.fa-kf-field     { display: flex; flex-direction: column; gap: 6px; }
+.fa-kf-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--green-dark);
+}
+.fa-kf-input, .fa-kf-textarea {
+  padding: 12px 16px;
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  color: #1a2e1a;
+  background: #f0fdf4;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  width: 100%;
+}
+.fa-kf-input:focus, .fa-kf-textarea:focus { border-color: var(--green); }
+.fa-kf-textarea { resize: vertical; }
+.fa-kf-btn {
+  padding: 15px;
+  background: linear-gradient(135deg, var(--green-dark), var(--green));
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(22,163,74,0.3);
+  transition: opacity 0.2s;
+}
+.fa-kf-btn:hover { opacity: 0.9; }
+.fa-kf-success {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: var(--green-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.fa-kf-ferror {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: #b91c1c;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .fa-impressum-grid { grid-template-columns: 1fr; }
+}
