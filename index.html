@@ -588,6 +588,12 @@
         tabBar.className = 'top-tab-bar ' + tab + '-bg';
         logo.textContent = logoTexts[tab];
         document.querySelector('footer').className = 'footer-' + tab;
+
+        // Kinder-Navigation immer auf Ebene 1 zurücksetzen
+        document.querySelector('.kategorie-grid').style.display = 'grid';
+        document.getElementById('ebene2').style.display = 'none';
+        document.getElementById('ebene3').style.display = 'none';
+        resetPlayBtn();
       });
     });
 
