@@ -18,6 +18,7 @@ module.exports = async function handler(req, res) {
       headers: { Authorization: `Bearer ${token}` }
     });
     const j = await r.json();
+    if (j.error) throw new Error('Upstash: ' + j.error);
     return j.result;
   }
 
@@ -27,11 +28,10 @@ module.exports = async function handler(req, res) {
       redis(['INCR', keyTotal]),
     ]);
 
-    // Tages-Key läuft nach 48h ab (automatische Bereinigung)
     await redis(['EXPIRE', keyDay, '172800']);
 
     return res.status(200).json({ today: todayCount, total: totalCount });
   } catch (e) {
-    return res.status(200).json({ today: '–', total: '–', debug: 'fetch error', error: e.message });
+    return res.status(200).json({ today: '–', total: '–', debug: e.message });
   }
 };
