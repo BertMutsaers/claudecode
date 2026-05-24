@@ -1000,11 +1000,24 @@ footer.footer-alle     { background: #43a047; }
 
 .footer-bottom {
   border-top: 1px solid rgba(255,255,255,0.3);
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
   padding: 20px;
   font-size: 0.85rem;
   color: rgba(255,255,255,0.8);
+  flex-wrap: wrap;
 }
+.footer-instagram {
+  color: rgba(255,255,255,0.85);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s, opacity 0.2s;
+  opacity: 0.85;
+}
+.footer-instagram:hover { opacity: 1; color: #fff; }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
