@@ -1342,3 +1342,20 @@ footer.footer-alle     { background: #43a047; }
 @media (max-width: 768px) {
   .fa-impressum-grid { grid-template-columns: 1fr; }
 }
+
+/* SEO Intro Block */
+.seo-intro {
+  padding: 28px 0 8px;
+  max-width: 700px;
+}
+.seo-intro h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--orange);
+  margin-bottom: 10px;
+}
+.seo-intro p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
