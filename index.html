@@ -368,7 +368,7 @@
   <!-- FOOTER -->
   <footer id="contact">
     <div class="footer-bottom">
-      <p>© 2026 Realum.cloud GmbH · Alle Rechte vorbehalten &nbsp;&nbsp;&nbsp;&nbsp; <a href="#" onclick="zeigeImpressum(); return false;" style="color:inherit;opacity:0.85;text-decoration:none;">Kontakt</a> &nbsp;&nbsp; <a href="#" onclick="zeigeImpressum(); return false;" style="color:inherit;opacity:0.85;text-decoration:none;">Impressum</a></p>
+      <p>© 2026 Realum.cloud GmbH · Alle Rechte vorbehalten &nbsp;&nbsp;&nbsp;&nbsp; <a href="#" onclick="zeigeImpressum(); return false;" style="color:inherit;opacity:0.85;text-decoration:none;">Kontakt</a> &nbsp;&nbsp; <a href="#" onclick="zeigeImpressum(); return false;" style="color:inherit;opacity:0.85;text-decoration:none;">Impressum</a> &nbsp;&nbsp;&nbsp;&nbsp; <span id="visitor-counter" style="opacity:0.7;font-size:0.85em;" title="Besucher heute · Besucher gesamt">👀 <span id="vc-today">–</span> · <span id="vc-total">–</span></span></p>
     </div>
   </footer>
 
@@ -911,6 +911,12 @@
     function kopieren(title, body) {
       navigator.clipboard.writeText(title + '\n\n' + body);
     }
+
+    // Besucherzähler laden
+    fetch('/api/counter').then(r => r.json()).then(d => {
+      document.getElementById('vc-today').textContent = Number(d.today).toLocaleString('de-DE');
+      document.getElementById('vc-total').textContent = Number(d.total).toLocaleString('de-DE');
+    }).catch(() => {});
 
     // Direkt-Link: beim Laden prüfen ob #story=... in der URL steht
     (function() {
