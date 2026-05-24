@@ -6,7 +6,7 @@ module.exports = async function handler(req, res) {
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
   if (!url || !token) {
-    return res.status(200).json({ today: '–', total: '–' });
+    return res.status(200).json({ today: '–', total: '–', debug: 'env missing', hasUrl: !!url, hasToken: !!token });
   }
 
   const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
@@ -32,6 +32,6 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({ today: todayCount, total: totalCount });
   } catch (e) {
-    return res.status(200).json({ today: '–', total: '–' });
+    return res.status(200).json({ today: '–', total: '–', debug: 'fetch error', error: e.message });
   }
 };
