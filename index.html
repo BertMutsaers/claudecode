@@ -914,8 +914,9 @@
 
     // Besucherzähler laden
     fetch('/api/counter').then(r => r.json()).then(d => {
-      document.getElementById('vc-today').textContent = Number(d.today).toLocaleString('de-DE');
-      document.getElementById('vc-total').textContent = Number(d.total).toLocaleString('de-DE');
+      const fmt = v => (typeof v === 'number') ? v.toLocaleString('de-DE') : v;
+      document.getElementById('vc-today').textContent = fmt(d.today);
+      document.getElementById('vc-total').textContent = fmt(d.total);
     }).catch(() => {});
 
     // Direkt-Link: beim Laden prüfen ob #story=... in der URL steht
