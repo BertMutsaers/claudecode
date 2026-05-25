@@ -1072,6 +1072,48 @@ footer.footer-alle     { background: #43a047; }
   margin-bottom: 24px;
 }
 
+.buch-extern-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.buch-extern-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #eff6ff;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 14px;
+  padding: 14px 18px;
+  text-decoration: none;
+  color: #1e40af;
+  transition: background 0.2s, border-color 0.2s;
+}
+.buch-extern-link:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+.buch-extern-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+.buch-extern-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.buch-extern-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.buch-extern-sub {
+  font-size: 0.8rem;
+  opacity: 0.65;
+  font-style: italic;
+}
+
 .stiftung-link-wrap {
   margin: 0 0 40px;
 }
