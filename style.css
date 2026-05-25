@@ -1481,13 +1481,13 @@ footer.footer-alle     { background: #43a047; }
   position: absolute;
   bottom: 0;
   left: 0;
-  animation: dracheWandern 9s linear infinite;
+  animation: dracheWandern 28s linear infinite;
 }
 .drache-img {
   height: 100px;
   width: auto;
   display: block;
-  animation: dracheHüpfen 0.45s ease-in-out infinite alternate;
+  animation: dracheHüpfen 0.8s ease-in-out infinite alternate;
   filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.10));
 }
 @keyframes dracheWandern {
