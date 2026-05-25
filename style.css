@@ -1472,19 +1472,19 @@ footer.footer-alle     { background: #43a047; }
 /* Drachen-Animation */
 .drache-bühne {
   width: 100%;
-  height: 90px;
+  height: 130px;
   position: relative;
   overflow: hidden;
-  margin: 32px 0 -16px;
+  margin: 16px 0 -8px;
 }
 .drache-laufer {
   position: absolute;
-  bottom: 0;
+  bottom: 8px;
   left: 0;
   animation: dracheWandern 28s linear infinite;
 }
 .drache-img {
-  height: 100px;
+  height: 90px;
   width: auto;
   display: block;
   animation: dracheHüpfen 0.8s ease-in-out infinite alternate;
@@ -1500,7 +1500,7 @@ footer.footer-alle     { background: #43a047; }
 }
 @keyframes dracheHüpfen {
   0%   { transform: translateY(0px) rotate(-1deg); }
-  100% { transform: translateY(-10px) rotate(1deg); }
+  100% { transform: translateY(-6px) rotate(1deg); }
 }
 
 /* SEO Intro Block */
