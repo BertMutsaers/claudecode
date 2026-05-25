@@ -991,10 +991,10 @@
       const img = document.getElementById('drache-img');
       if (!img) return;
       let nachRechts = true;
-      img.src = 'images/drache1.png'; // schaut rechts
+      img.src = 'images/drache2.png'; // schaut rechts
       setInterval(() => {
         nachRechts = !nachRechts;
-        img.src = nachRechts ? 'images/drache1.png' : 'images/drache2.png';
+        img.src = nachRechts ? 'images/drache2.png' : 'images/drache1.png';
       }, 14000); // halbe Animationsdauer
     })();
 
