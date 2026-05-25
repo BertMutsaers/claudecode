@@ -1342,6 +1342,37 @@ footer.footer-alle     { background: #43a047; }
   text-align: center;
 }
 
+.fa-stiftung-card {
+  display: block;
+  background: #f0fdf4;
+  border: 2px solid #86efac;
+  border-radius: 20px;
+  padding: 28px 32px;
+  text-decoration: none;
+  color: #166534;
+  max-width: 560px;
+  transition: background 0.2s, border-color 0.2s;
+  line-height: 1.7;
+}
+.fa-stiftung-card:hover {
+  background: #dcfce7;
+  border-color: #4ade80;
+}
+.fa-stiftung-card p {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+.fa-stiftung-card p:last-child { margin-bottom: 0; }
+.fa-stiftung-empfehlung {
+  font-weight: 800;
+  font-size: 1.05rem !important;
+  margin-bottom: 14px !important;
+}
+.fa-stiftung-cta {
+  font-weight: 700;
+  margin-top: 14px !important;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .fa-fakten-grid    { grid-template-columns: 1fr 1fr; }
