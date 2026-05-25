@@ -1469,6 +1469,40 @@ footer.footer-alle     { background: #43a047; }
   .fa-impressum-grid { grid-template-columns: 1fr; }
 }
 
+/* Drachen-Animation */
+.drache-bühne {
+  width: 100%;
+  height: 110px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.drache-laufer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  animation: dracheWandern 9s linear infinite;
+}
+.drache-img {
+  height: 100px;
+  width: auto;
+  display: block;
+  animation: dracheHüpfen 0.45s ease-in-out infinite alternate;
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.10));
+}
+@keyframes dracheWandern {
+  0%   { left: -120px; }
+  48%  { left: calc(100% + 20px); }
+  48.01% { left: calc(100% + 20px); }
+  50%  { left: calc(100% + 20px); }
+  98%  { left: -120px; }
+  100% { left: -120px; }
+}
+@keyframes dracheHüpfen {
+  0%   { transform: translateY(0px) rotate(-1deg); }
+  100% { transform: translateY(-10px) rotate(1deg); }
+}
+
 /* SEO Intro Block */
 .seo-intro {
   padding: 28px 0 8px;

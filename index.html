@@ -52,6 +52,11 @@
 
       <!-- Tab: Für Kinder — Ebene 1: Kategorien -->
       <div class="tab-content active kinder-content" id="tab-kinder">
+        <div class="drache-bühne">
+          <div class="drache-laufer" id="drache-laufer">
+            <img class="drache-img" id="drache-img" src="images/drache1.png" alt="Drache" />
+          </div>
+        </div>
         <div class="seo-intro">
           <h1>Kostenlose Kindergeschichten zum Vorlesen</h1>
           <p>Entdecke über 60 kostenlose Kindergeschichten zum Vorlesen und Anhören — von Gute-Nacht-Geschichten bis Abenteuer. Einfach eine Kategorie wählen und loslesen!</p>
@@ -980,6 +985,18 @@
     function kopieren(title, body) {
       navigator.clipboard.writeText(title + '\n\n' + body);
     }
+
+    // Drachen-Animation: Bild wechseln je nach Richtung
+    (function() {
+      const img = document.getElementById('drache-img');
+      if (!img) return;
+      let nachRechts = true;
+      img.src = 'images/drache1.png'; // schaut rechts
+      setInterval(() => {
+        nachRechts = !nachRechts;
+        img.src = nachRechts ? 'images/drache1.png' : 'images/drache2.png';
+      }, 4500); // halbe Animationsdauer
+    })();
 
     // Besucherzähler laden
     fetch('/api/counter').then(r => r.json()).then(d => {
