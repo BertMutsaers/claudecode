@@ -1475,7 +1475,7 @@ footer.footer-alle     { background: #43a047; }
   height: 130px;
   position: relative;
   overflow: hidden;
-  margin: 4px 0 -20px;
+  margin: -12px 0 -28px;
 }
 .drache-laufer {
   position: absolute;
