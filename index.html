@@ -990,16 +990,26 @@
       zeigeEbene3('Der pupsende Drache', 'images/lustig-2.jpg', 'audio/lustig-2.mp3');
     }
 
-    // Drachen-Animation: Bild wechseln je nach Richtung
+    // Drachen-Animation: Bild wechseln je nach Richtung + nach 20s ausblenden
     (function() {
       const img = document.getElementById('drache-img');
-      if (!img) return;
+      const bühne = document.querySelector('.drache-bühne');
+      if (!img || !bühne) return;
       let nachRechts = true;
       img.src = 'images/drache2.png'; // schaut rechts
       setInterval(() => {
         nachRechts = !nachRechts;
         img.src = nachRechts ? 'images/drache2.png' : 'images/drache1.png';
-      }, 14000); // halbe Animationsdauer
+      }, 14000);
+
+      // Nach 20 Sekunden sanft ausblenden und entfernen
+      setTimeout(() => {
+        bühne.style.transition = 'opacity 1.5s ease, max-height 1s ease 1s';
+        bühne.style.opacity = '0';
+        bühne.style.maxHeight = '0';
+        bühne.style.overflow = 'hidden';
+        bühne.style.margin = '0';
+      }, 20000);
     })();
 
     // Besucherzähler laden
