@@ -6815,4 +6815,156 @@ Sie umarmten sich an Daans Haustür. „Bis morgen, mein bester Freund!"
 „Bis morgen!"
 
 Und Daan ging hinein. Tropfnass. Aber so glücklich wie noch nie. Denn er hatte gelernt: Wenn man einen besten Freund hat, dann kann sogar Regen die schönste Sache der Welt sein.`,
+
+    "Die fliegende Ballonstadt über dem Dorf": `Die fliegende Ballonstadt über dem Dorf
+
+Lenn stand mitten auf dem Dorfplatz und schaute zum Kirchturm hinauf. „Wisst ihr was?", rief er seinen Freunden zu. „Wir sollten da oben wohnen!"
+
+Finn kratzte sich am Kopf. „Im Kirchturm? Da wohnt doch schon der Pfarrer."
+
+„Nein, nein!", rief Lenn aufgeregt. „Nicht IM Kirchturm. AUF der Höhe vom Kirchturm! In der Luft!"
+
+Neo kicherte. „Du willst fliegen wie ein Vogel?"
+
+„Besser!", erklärte Lenn. „Wir bauen uns eine Stadt aus riesigen Luftballons! So groß wie Zeppeline! Die binden wir alle zusammen, und dann haben wir unsere eigene Stadt in der Luft!"
+
+Mila klappte der Mund auf. „Das ist ja eine verrückte Idee!"
+
+„Verrückt gut!", rief Theo begeistert.
+
+Moritz runzelte die Stirn. „Aber wie kommen wir dann rauf und runter?"
+
+„Mit Seilleitern natürlich!", antwortete Lenn, als wäre das die einfachste Sache der Welt.
+
+Maja hüpfte vor Freude auf und ab. „Das wird das beste Baumhaus der Welt – nur ohne Baum!"
+
+Die sieben Freunde machten sich sofort an die Arbeit. In Finns Garten bauten sie die ersten Ballons. Finns Papa hatte alte Stoffbahnen auf dem Dachboden, und Neos Mama konnte richtig gut nähen.
+
+„Die Ballons müssen riesengroß sein!", rief Lenn. „So groß wie Finns Gartenhaus!"
+
+Drei Tage lang nähten sie und klebten und bastelten. Die Ballons sahen aus wie dicke, bunte Würste mit Körben dran.
+
+„Womit füllen wir sie?", fragte Theo.
+
+Neo grinste. „Mit warmer Luft! Mein Opa hat einen alten Heizlüfter."
+
+Als der erste Ballon fertig war, pusteten sie ihn mit dem Heizlüfter voll. Langsam, ganz langsam begann er zu schweben!
+
+„Er fliegt!", kreischte Maja.
+
+„Er fliegt schief!", rief Moritz und versuchte, den Korb festzuhalten.
+
+Tatsächlich hing der Ballon ziemlich windschief in der Luft. Aber er flog! Das war die Hauptsache.
+
+Nach zwei Wochen hatten sie sieben große Ballons fertig. Jeder in einer anderen Farbe: rot, blau, grün, gelb, orange, lila und rosa.
+
+„Jetzt müssen wir sie hochfliegen lassen und zusammenbinden!", verkündete Lenn.
+
+„Wer fliegt zuerst?", fragte Finn nervös.
+
+Alle schauten sich an. Dann zeigte Lenn auf sich selbst. „Ich hab's erfunden, also fahr ich!"
+
+Er kletterte in den roten Ballon-Korb. Die anderen ließen langsam das Seil los. Der Ballon stieg höher und höher. Lenn winkte nach unten. „Alles super!", rief er. „Hier oben ist es toll! Man kann über alle Häuser gucken!"
+
+Plötzlich kam eine Windböe. Der Ballon schaukelte wild hin und her.
+
+„Festhalten!", brüllte Finn von unten.
+
+„Woran denn?", brüllte Lenn zurück. „Hier oben ist nur Luft!"
+
+Der Wind trieb den Ballon direkt auf den Kirchturm zu. Lenn machte sich ganz klein. „Weg da, Kirchturm!", rief er.
+
+BONG! machte die Kirchenglocke, als der Korb dagegen stieß.
+
+Lenn fiel auf seinen Po. „Autsch! Die Glocke hat mich gehauen!"
+
+Von unten kicherten die Freunde. Finn zog am Seil und holte Lenn wieder runter.
+
+„Vielleicht sollten wir längere Seile nehmen", meinte Moritz.
+
+„Und Helme!", fügte Maja hinzu.
+
+Beim zweiten Versuch klappte es besser. Sie ließen alle sieben Ballons gleichzeitig steigen – genau auf Kirchturmhöhe. Dann kletterten sie an den langen Seilleitern hinauf und begannen, die Ballons mit dicken Seilen zusammenzubinden.
+
+„Das wird unsere Ballonstraße!", rief Neo und band seinen blauen Ballon an Theos grünen.
+
+„Und hier ist der Ballonplatz!", rief Maja und band ihren rosa Ballon in die Mitte.
+
+Nach einem halben Tag schaukelten alle sieben Ballons gemütlich nebeneinander in der Luft. Sie waren mit vielen Seilen verbunden und bildeten tatsächlich so etwas wie eine kleine Stadt!
+
+„Jetzt brauchen wir noch Häuser!", sagte Lenn.
+
+„Die Körbe SIND doch unsere Häuser!", antwortete Finn.
+
+„Zu klein!", meinte Lenn. „Wir brauchen richtige Zimmer!"
+
+Also schleppten sie Bretter, Decken, Kissen und sogar einen kleinen Tisch die Seilleitern hinauf. Das war ganz schön anstrengend! Die Leitern wackelten und schwankten bei jedem Schritt.
+
+„Mir wird schwindelig!", klagte Theo.
+
+„Nicht nach unten gucken!", rief Moritz, der über ihm kletterte.
+
+„Wohin soll ich denn sonst gucken?", jammerte Theo.
+
+„Nach oben natürlich! Da ist doch die Stadt!"
+
+In jedem Korb richteten sie ein kleines Zimmer ein. Lenns Ballon war das Rathaus. Finns Ballon wurde die Bibliothek – mit drei ganzen Büchern! Neos Ballon war die Sporthalle, Milas Ballon die Bäckerei, Theos Ballon das Kino, Moritz' Ballon der Supermarkt und Majas Ballon das Café.
+
+„Jetzt sind wir eine richtige Stadt!", jubelte Maja.
+
+Am nächsten Morgen kletterten alle Kinder nach oben, um in ihrer Ballonstadt zu frühstücken. Mila hatte Kekse mitgebracht, die sie in ihrer Luftballon-Bäckerei verkaufte.
+
+„Das macht zwei Kastanien pro Keks", sagte sie geschäftsmäßig.
+
+„Kastanien?", fragte Neo verwirrt.
+
+„Ja, das ist unser Ballonstadtgeld!", erklärte Mila. „Ich hab's mir ausgedacht!"
+
+Plötzlich hörten sie ein seltsames Geräusch. FLATSCH. FLATSCH. FLATSCH.
+
+„Was ist das?", flüsterte Finn ängstlich.
+
+Lenn guckte über den Rand seines Korbes. Unten auf dem Dorfplatz standen alle Eltern und schauten nach oben.
+
+„LENN!", rief Lenns Mama. „WAS MACHT IHR DA OBEN?"
+
+„Wir wohnen hier!", rief Lenn zurück. „In unserer neuen Stadt!"
+
+„KOMMT SOFORT RUNTER! ES GIBT MITTAGESSEN!"
+
+Die Kinder schauten sich an. Mittagessen klang eigentlich gut. Die Kekse waren alle.
+
+„Wir kommen zum Essen!", rief Lenn. „Aber dann ziehen wir wieder hoch!"
+
+Einer nach dem anderen kletterten sie die wackeligen Seilleitern hinunter. Als letztes kam Maja. Auf halber Strecke blieb sie stehen und rief nach oben: „Bis nachher, Ballonstadt! Wir kommen wieder!"
+
+Beim Mittagessen erzählten die Kinder aufgeregt von ihrer fliegenden Stadt. Die Eltern hörten staunend zu.
+
+„Ihr habt wirklich sieben Ballons zusammengebunden?", fragte Finns Papa ungläubig.
+
+„Und Zimmer eingerichtet?", fragte Neos Mama.
+
+„Mit einem Supermarkt!", ergänzte Moritz stolz. „Da verkaufe ich Tannenzapfen und schöne Steine!"
+
+Nach dem Essen wollten die Kinder sofort wieder nach oben klettern. Aber Lenns Mama hatte eine andere Idee.
+
+„Vielleicht sollten wir uns eure Stadt mal anschauen", sagte sie mit einem geheimnisvollen Lächeln.
+
+Alle Eltern und die sieben Kinder marschierten zum Dorfplatz. Dort baumelten die bunten Ballons friedlich in der Luft und warfen lustige Schatten auf die Straße.
+
+„Das ist wirklich beeindruckend!", sagte Theos Papa.
+
+„Aber ein bisschen weit oben", meinte Majas Mama nervös.
+
+„Und die Seilleitern wackeln ziemlich", fügte Moritz' Papa hinzu.
+
+Die Kinder schauten enttäuscht drein. Sollten sie ihre tolle Stadt etwa wieder abbauen?
+
+Aber dann sagte Finns Papa: „Wisst ihr was? Vielleicht können wir die Stadt ein bisschen tiefer fliegen lassen. Und stabilere Leitern bauen. Dann können wir alle manchmal dort oben picknicken!"
+
+„JAAA!", jubelten die Kinder.
+
+Und so kam es, dass über dem Dorfplatz eine bunte Ballonstadt schwebte – nicht mehr ganz so hoch wie der Kirchturm, aber hoch genug, um über alle Dächer zu schauen. An Wochenenden kletterten die Familien hinauf und tranken Kakao im Luftcafé oder lasen Geschichten in der fliegenden Bibliothek.
+
+Und wenn die Kirchenglocke läutete, schaukelten die bunten Ballons im Takt dazu hin und her, als würden sie zu der Musik tanzen.`,
     };
