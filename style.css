@@ -727,6 +727,32 @@ footer.footer-kinder   { background: #ff9800; }
 footer.footer-vorleser { background: #1e88e5; }
 footer.footer-alle     { background: #43a047; }
 
+/* ── NEU KATEGORIE ─────────────────────────────────────────────────── */
+.kategorie-card.kategorie-card-neu {
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%);
+  border: 2px solid #fbbf24;
+  position: relative;
+  overflow: visible;
+}
+.kategorie-card.kategorie-card-neu::after {
+  content: 'NEU';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #f97316;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(249,115,22,0.4);
+}
+.kategorie-card.kategorie-card-neu:hover {
+  box-shadow: 0 12px 32px rgba(251,191,36,0.35);
+}
+.kat-neu-badge { font-size: 1em; }
+
 /* ── VORLESER KACHELN ──────────────────────────────────────────────── */
 .vorleser-grid { grid-template-columns: repeat(3, 1fr); }
 .kategorie-card.vorleser-card { background: #eff6ff !important; }
