@@ -925,7 +925,11 @@
       }
     }
 
+    let _genTitel = '', _genBody = '';
+
     function renderGenErgebnis(title, body, namen) {
+      _genTitel = title;
+      _genBody  = body;
       const absaetze = body.split('\n\n').filter(Boolean).map(p=>`<p class="vl-story-para">${p.trim()}</p>`).join('');
       document.getElementById('gen-ergebnis').innerHTML = `
         <div class="vl-story-card">
@@ -937,10 +941,16 @@
           </div>
           <div class="vl-story-body">${absaetze}</div>
           <div class="vl-story-actions">
-            <button class="vl-action-btn" onclick="kopieren('${title.replace(/'/g,"\\'")}', \`${body.replace(/`/g,'\\`')}\`)">📋 Kopieren</button>
+            <button class="vl-action-btn" id="kopieren-btn">📋 Kopieren</button>
             <button class="vl-action-btn" onclick="document.getElementById('gen-ergebnis').innerHTML='';document.getElementById('gen-namen').value='';document.getElementById('gen-handlung').value=''">🔄 Neue Geschichte</button>
           </div>
         </div>`;
+      document.getElementById('kopieren-btn').addEventListener('click', function() {
+        navigator.clipboard.writeText(_genTitel + '\n\n' + _genBody).then(() => {
+          this.textContent = '✅ Kopiert!';
+          setTimeout(() => { this.innerHTML = '📋 Kopieren'; }, 2000);
+        });
+      });
     }
 
     function zeigeImpressum() {
