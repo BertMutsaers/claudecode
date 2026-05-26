@@ -903,7 +903,7 @@
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body:JSON.stringify({
-            model:'claude-sonnet-4-5', max_tokens:2000,
+            model:'claude-sonnet-4-5', max_tokens:3500,
             system:`Du bist ein Kinderbuchautor. Schreibe IMMER auf Deutsch. Beginne direkt mit der Geschichte. Gib ihr einen kreativen Titel in der ersten Zeile, gefolgt von einer Leerzeile. Ca. ${wordMap[genLaenge]} Wörter. Alter ${genAlter}: ${alterText[genAlter]}. Stimmung: ${stimmungText[genStimmung]}. Absätze mit Leerzeilen trennen. Kein Markdown.`,
             messages:[{role:'user',content:`Hauptfigur(en): ${namen}\nHandlung: ${handlung}`}]
           })
