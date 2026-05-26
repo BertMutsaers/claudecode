@@ -872,9 +872,15 @@
     }
 
     function renderPills(id, opts, getVal, setVal) {
-      document.getElementById(id).innerHTML = opts.map(o =>
-        `<button class="vl-pill ${getVal()===o.val?'aktiv':''}" onclick="(${setVal.toString()})(${JSON.stringify(o.val)})">${o.label}</button>`
+      const container = document.getElementById(id);
+      container.innerHTML = opts.map(o =>
+        `<button class="vl-pill ${getVal()===o.val?'aktiv':''}" data-val="${o.val}">${o.label}</button>`
       ).join('');
+      container.querySelectorAll('.vl-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          setVal(btn.dataset.val);
+        });
+      });
     }
 
     async function generiereGeschichte() {
