@@ -6967,4 +6967,68 @@ Aber dann sagte Finns Papa: „Wisst ihr was? Vielleicht können wir die Stadt e
 Und so kam es, dass über dem Dorfplatz eine bunte Ballonstadt schwebte – nicht mehr ganz so hoch wie der Kirchturm, aber hoch genug, um über alle Dächer zu schauen. An Wochenenden kletterten die Familien hinauf und tranken Kakao im Luftcafé oder lasen Geschichten in der fliegenden Bibliothek.
 
 Und wenn die Kirchenglocke läutete, schaukelten die bunten Ballons im Takt dazu hin und her, als würden sie zu der Musik tanzen.`,
+
+  "Lotte und ihr roter Luftballon": `Lotte und ihr roter Luftballon
+
+Zu ihrem siebten Geburtstag bekam Lotte von ihrer Mama Rike einen wunderschönen roten Luftballon. Lotte strahlte über das ganze Gesicht. Denn jedes Jahr, an jedem einzelnen Geburtstag, hatte ihr Oma Ruth genau so einen roten Luftballon geschenkt.
+
+Doch Oma Ruth war vor drei Monaten gestorben, und Lotte vermisste sie sehr. Oma war immer für sie da gewesen. Am allerschönsten waren ihre Geschichten — von mutigen Mäusen, von fliegenden Schiffen und von Sternen, die singen konnten. Seit Oma fort war, hatte ihr niemand mehr eine Geschichte vorgelesen.
+
+Der rote Luftballon fühlte sich an wie ein kleines Stück von Oma. Wenn Lotte ihn ansah, musste sie an all die schönen Tage denken.
+
+Zum Geburtstag hatte Mama viele Freundinnen eingeladen, und natürlich Max und Til, mit denen Lotte am liebsten spielte. Auch die beiden waren noch traurig. „Weißt du noch, wie wir bei Oma Ruth übers Wochenende waren?", sagte Til leise. „Da war es immer so lustig." Max nickte. „Und so viele Geschichten."
+
+Als sie nach dem Geburtstagsgrillen zusammensaßen, schaute Til den Luftballon an. „Der erinnert mich so sehr an Oma Ruth." Max blickte hinauf in den Himmel. „Vielleicht sollte er zu ihr fliegen", sagte er. „In den Himmel."
+
+Lotte war sich nicht sicher. War Oma wirklich da oben? Wo war sie jetzt bloß? „Oma ist im Himmel", hatte Mama gesagt. Aber so richtig vorstellen konnte Lotte sich das nicht. Trotzdem beschlossen die drei, den Luftballon zu Oma fliegen zu lassen.
+
+Lotte hielt das Band ganz fest. Dann öffnete sie die Hand. Der Wind nahm den Ballon mit, höher und höher. Alle drei schauten ihm nach, bis er in eine weiße Wolke flog — und plötzlich verschwunden war.
+
+In dieser Nacht konnte Lotte nicht einschlafen. Sie schaute aus dem Fenster zu den Sternen. Da — ganz weit oben — leuchtete etwas Rotes. Es war ihr Luftballon!
+
+„Komm, Lotte!", rief eine leise, fröhliche Stimme. Und auf einmal — Lotte wusste gar nicht, wie — schwebte sie selbst hinauf in die Nacht, leicht wie eine Feder, und hielt sich am Band des Luftballons fest.
+
+Sie flog über die Dächer ihres Dorfes, über dunkle Wälder und silberne Flüsse. Der Wind kitzelte ihre Nase. „Halt dich gut fest!", lachte der Ballon, denn hier oben im Himmel konnte er sprechen.
+
+Sie flogen durch eine Wolke, die sich anfühlte wie weiche Zuckerwatte. Ein Schwarm Schwalben begleitete sie ein Stück. „Wohin fliegst du?", zwitscherten sie. „Ich suche meine Oma", sagte Lotte. Die Schwalben zeigten mit ihren Flügeln nach oben. „Dann flieg dem hellsten Stern entgegen — aber pass auf die Brummelwolke auf!"
+
+Lotte wusste nicht, was eine Brummelwolke war. Doch schon bald sah sie sie: eine große, dunkelgraue Wolke, die mitten am Himmel hing und brummte wie ein müder Bär. „Hier kommt niemand vorbei!", grollte sie, und kleine Blitze zuckten an ihrem Rand. „Halt!"
+
+Der Ballon zitterte ein wenig. „Oje", flüsterte er. „An ihr müssen wir vorbei, sonst kommen wir nicht weiter."
+
+Lotte hatte ein bisschen Angst. Aber dann dachte sie an Oma Ruth. In Omas Geschichten waren die Mäuse immer mutig gewesen, auch wenn sie ganz klein waren. Also holte Lotte tief Luft und rief: „Liebe Wolke, warum brummst du denn so?"
+
+Die Wolke war so überrascht, dass jemand mit ihr sprach, dass sie zu grollen aufhörte. „Niemand redet mit mir", schniefte sie. „Alle fliegen einfach an mir vorbei. Ich bin so allein hier oben."
+
+„Das tut mir leid", sagte Lotte. „Weißt du was? Wir bleiben kurz bei dir." Und sie erzählte der Wolke eine kleine Geschichte — von einer Maus, die das Meer überquerte. Die Brummelwolke hörte gespannt zu, und während sie lauschte, wurde sie ganz weich und hell. „Das war wunderschön", sagte sie. „Flieg nur, kleines Mädchen. Und komm bald wieder!" Sanft pustete sie Lotte und den Ballon weiter nach oben.
+
+„Das hast du toll gemacht", sagte der Ballon stolz.
+
+Immer höher ging die Reise. Plötzlich hörte Lotte ein leises Weinen. Auf einer Wolke saß ein winziger Stern, ganz traurig und blass. „Ich habe meinen Platz am Himmel verloren", schluchzte er. „Jetzt kann ich nicht mehr leuchten."
+
+Lotte überlegte nicht lange. „Steig auf", sagte sie und streckte die Hand aus. Der kleine Stern kletterte zu ihr, und gemeinsam suchten sie die dunkle Lücke am Himmel, wo er hingehörte. Als der Stern wieder an seinem Platz saß, fing er an zu leuchten — und dann zu singen, ganz fein und klar. Genau so ein Stern, wie Oma ihn in ihren Geschichten beschrieben hatte!
+
+Und je höher Lotte flog, desto leichter fühlte sie sich. All die Schwere in ihrem Bauch, all die Traurigkeit — sie blieb unten zurück, wie ein schwerer Mantel, den man auszieht.
+
+Schließlich erreichten sie einen Ort voller warmem, goldenem Licht. Und dort — Lotte traute ihren Augen kaum — saß Oma Ruth auf einer Wolke und winkte ihr zu.
+
+„Meine kleine Lotte", sagte Oma und lächelte. „Wie schön, dass du da bist. Ich habe alles gesehen — wie mutig du bei der Brummelwolke warst und wie lieb zu dem kleinen Stern."
+
+Lotte umarmte sie ganz fest. „Oma, ich hab dich so vermisst! Niemand erzählt mir mehr Geschichten."
+
+Oma strich ihr über das Haar. „Aber Lottchen — die Geschichten sind doch gar nicht weg. Sie sind alle hier drin." Und sie legte sanft die Hand auf Lottes Herz. „Jede Geschichte, die ich dir erzählt habe, trägst du in dir. Du hast es eben selbst gemerkt: Eine davon hat sogar eine ganze Wolke glücklich gemacht. Und weißt du was? Jetzt bist du dran, sie weiterzuerzählen."
+
+„Ich?", fragte Lotte staunend.
+
+„Du", sagte Oma. „Erzähl sie Max und Til. Erzähl sie deiner Mama. Und eines Tages deinen eigenen Kindern. So bleibe ich immer bei euch." Oma zeigte auf den roten Luftballon. „Schau, der Ballon ist frei und fliegt, wohin er will. Und genauso ist es mit der Liebe: Man kann sie nicht festhalten — aber sie geht auch niemals verloren."
+
+Lotte spürte etwas Warmes in ihrem Herzen, wie einen kleinen Sonnenstrahl.
+
+„Jetzt schlaf, mein Schatz", flüsterte Oma. „Und vergiss nicht: Ich bin immer da, wo du an mich denkst." Sie gab Lotte einen Kuss auf die Stirn, und der rote Ballon trug sie sanft wieder nach unten, vorbei am singenden Stern, vorbei an der nun strahlenden Brummelwolke, die ihr fröhlich hinterherwinkte.
+
+Am nächsten Morgen wachte Lotte auf. Durch das Fenster schien die Sonne. War es nur ein Traum gewesen? Vielleicht. Aber die Schwere in ihrem Bauch war weg, und in ihrem Herzen war es ganz warm und hell. Auf ihrem Fensterbrett aber — und das war das Allerwunderbarste — lag eine winzige, golden leuchtende Sternschnuppe, so klein wie ein Krümel.
+
+Am Nachmittag kamen Max und Til zu Besuch. Lotte holte tief Luft. „Setzt euch", sagte sie und lächelte. „Ich erzähl euch eine Geschichte. Sie ist von einer mutigen Maus, von einer Wolke, die wieder lachen lernte, und von einem Stern, der singen kann."
+
+Und während Lotte erzählte, war es fast so, als säße Oma Ruth mit im Zimmer und hörte ihr zu — und freute sich.`,
     };
