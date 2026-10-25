@@ -82,9 +82,11 @@
     .login-error {
       margin-top: 12px;
       font-size: .85rem;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--danger);
       display: none;
+      line-height: 1.4;
+      white-space: pre-wrap;
     }
 
     /* ── ADMIN LAYOUT ── */
@@ -576,21 +578,40 @@
     }
 
     // ── Load stories ──────────────────────────────────────────────────────
+    async function showLoginError(msg) {
+      const el = document.getElementById('login-error');
+      el.textContent = msg;
+      el.style.display = 'block';
+      document.getElementById('admin-view').style.display = 'none';
+      document.getElementById('login-view').style.display = 'flex';
+      sessionPw = '';
+    }
+
     async function loadStories() {
       try {
         const resp = await fetch(`/api/story-admin?pw=${encodeURIComponent(sessionPw)}`);
         if (resp.status === 401) {
-          document.getElementById('login-error').style.display = 'block';
-          sessionPw = '';
+          await showLoginError('Falsches Kennwort.');
           return;
         }
-        stories = await resp.json();
+        if (!resp.ok) {
+          let msg = `Server-Fehler ${resp.status}.`;
+          try { const d = await resp.json(); if (d.error) msg = d.error; } catch {}
+          await showLoginError(msg + ' Bitte in Vercel prüfen ob ADMIN_PASSWORD gesetzt ist.');
+          return;
+        }
+        const data = await resp.json();
+        if (!Array.isArray(data)) {
+          await showLoginError('Unerwartete Server-Antwort. Bitte Seite neu laden.');
+          return;
+        }
+        stories = data;
         document.getElementById('login-view').style.display  = 'none';
         document.getElementById('admin-view').style.display  = 'block';
         renderStats();
         renderList();
       } catch (e) {
-        alert('Verbindungsfehler. Bitte Seite neu laden.');
+        await showLoginError('Verbindungsfehler: ' + e.message);
       }
     }
 
