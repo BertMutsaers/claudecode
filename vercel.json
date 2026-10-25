@@ -1,9 +1,10 @@
 {
+  "cleanUrls": true,
   "redirects": [
     {
       "source": "/",
       "has": [{ "type": "host", "value": "zaubern.vorlesen.de" }],
-      "destination": "/story-creator.html",
+      "destination": "/story-creator",
       "permanent": false
     }
   ],
