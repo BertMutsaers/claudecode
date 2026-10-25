@@ -1101,12 +1101,12 @@
           const match = stories.find(s => s.titel === storyParam);
           if (match) {
             const bild = KAT_BILDER[match.kategorie] || 'images/kat-abenteuer.jpg';
-            // Sicherstellen dass Geschichten-Tab aktiv ist
+            // Kinder-Tab sicherstellen (ist Standard, aber sicher ist sicher)
             document.querySelectorAll('.top-tab').forEach(b => b.classList.remove('active'));
-            document.querySelector('.geschichten-tab').classList.add('active');
+            document.querySelector('[data-tab="kinder"]').classList.add('active');
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById('tab-geschichten').classList.add('active');
-            // Kategorie-Ebene überspringen, direkt zur Geschichte
+            document.getElementById('tab-kinder').classList.add('active');
+            // Direkt zur Geschichte springen (Kategorie-Ebene überspringen)
             zeigeEbene2('Neu');
             zeigeEbene3(match.titel, bild, '');
           }
