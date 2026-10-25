@@ -177,75 +177,79 @@
       50%     { box-shadow: 0 0 0 12px rgba(229,62,62,0);  }
     }
 
-    /* ── Waveform ── */
-    .waveform-bar {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 2px 16px rgba(229,62,62,.18);
-      overflow: hidden;
-      max-height: 0;
+    /* ── Recording bar (ChatGPT-Style) ── */
+    .s1-rec-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 62px;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(6px);
+      border-top: 1.5px solid #dbeafe;
+      border-radius: 0 0 18px 18px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 10px;
       opacity: 0;
-      transition: max-height .35s cubic-bezier(.4,0,.2,1), opacity .3s ease, padding .35s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      padding: 0 16px;
+      transform: translateY(6px);
+      pointer-events: none;
+      transition: opacity .22s ease, transform .22s ease;
     }
-    .waveform-bar.show {
-      max-height: 160px;
+    .s1-rec-bar.show {
       opacity: 1;
-      padding: 14px 16px 12px;
+      transform: translateY(0);
+      pointer-events: all;
     }
-    #waveform-canvas { width: 100%; height: 56px; display: block; }
-    .waveform-label {
-      font-size: .8rem;
-      font-weight: 800;
-      color: #e53e3e;
-      letter-spacing: .3px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .waveform-bar.paused .waveform-label { color: var(--muted); }
-    .waveform-bar.paused #waveform-canvas { opacity: .35; }
-    .waveform-dot {
-      width: 8px; height: 8px;
-      background: #e53e3e;
+    .rec-x {
+      width: 38px; height: 38px;
       border-radius: 50%;
-      animation: blink .9s ease-in-out infinite;
+      border: 1.5px solid #d1d5db;
+      background: white;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #6b7280;
+      flex-shrink: 0;
+      transition: border-color .15s, background .15s;
     }
-    .waveform-bar.paused .waveform-dot {
-      background: var(--muted);
-      animation: none;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
-
-    /* Pause / Delete controls */
-    .waveform-controls {
-      display: flex;
-      gap: 8px;
-      width: 100%;
-    }
-    .wf-btn {
+    .rec-x:hover { border-color: #9ca3af; background: #f9fafb; }
+    .rec-dots {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      padding: 7px 10px;
-      border-radius: 50px;
-      border: 2px solid;
-      font-family: 'Nunito', sans-serif;
-      font-size: .8rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: background .15s, color .15s;
+      gap: 4px;
     }
-    .wf-btn-pause  { border-color: #e53e3e; color: #e53e3e; background: white; }
-    .wf-btn-pause:hover  { background: #e53e3e; color: white; }
-    .wf-btn-delete { border-color: #bfdbfe; color: var(--muted); background: white; }
-    .wf-btn-delete:hover { background: #eff6ff; }
+    .rec-dots span {
+      width: 4px;
+      border-radius: 2px;
+      background: #9ca3af;
+      animation: recBounce 1.1s ease-in-out infinite;
+    }
+    .rec-dots span:nth-child(1) { height:10px; animation-delay:  0s;   }
+    .rec-dots span:nth-child(2) { height:18px; animation-delay: .12s;  }
+    .rec-dots span:nth-child(3) { height:26px; animation-delay: .24s;  }
+    .rec-dots span:nth-child(4) { height:18px; animation-delay: .36s;  }
+    .rec-dots span:nth-child(5) { height:10px; animation-delay: .48s;  }
+    .rec-dots span:nth-child(6) { height:18px; animation-delay: .36s;  }
+    .rec-dots span:nth-child(7) { height:26px; animation-delay: .24s;  }
+    .rec-dots span:nth-child(8) { height:18px; animation-delay: .12s;  }
+    .rec-dots span:nth-child(9) { height:10px; animation-delay:  0s;   }
+    @keyframes recBounce {
+      0%,100% { transform: scaleY(.5); opacity: .45; }
+      50%      { transform: scaleY(1);  opacity: 1;   }
+    }
+    .rec-stop {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: #1f2937;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      flex-shrink: 0;
+      transition: background .15s;
+    }
+    .rec-stop:hover { background: #111827; }
 
     .s1-hint {
       text-align: center;
@@ -533,28 +537,26 @@
             <line x1="8" y1="23" x2="16" y2="23"/>
           </svg>
         </button>
-      </div>
-
-      <!-- Waveform – appears when mic is recording -->
-      <div class="waveform-bar" id="waveform-bar">
-        <canvas id="waveform-canvas"></canvas>
-        <div class="waveform-label">
-          <span class="waveform-dot" id="wave-dot"></span>
-          <span id="wave-status">Aufnahme läuft …</span>
-        </div>
-        <div class="waveform-controls">
-          <button class="wf-btn wf-btn-pause" id="wf-pause-btn" onclick="togglePause()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-            Pause
+        <!-- Recording bar – ChatGPT-Style -->
+        <div class="s1-rec-bar" id="rec-bar">
+          <button class="rec-x" id="rec-cancel" title="Aufnahme abbrechen">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
           </button>
-          <button class="wf-btn wf-btn-delete" onclick="deleteRecording()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            Löschen
+          <div class="rec-dots" id="rec-dots">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <button class="rec-stop" id="rec-stop" title="Aufnahme beenden">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="4" y="4" width="16" height="16" rx="2"/>
+            </svg>
           </button>
         </div>
       </div>
 
-      <p class="s1-hint">Tippe deinen Wunsch ein oder erzähle ihn einfach über das Mikrofon.</p>
+      <p class="s1-hint">Tippe deine Idee ein oder tippe das Mikrofon und sprich einfach drauflos.</p>
 
       <button class="s1-btn" id="sc1-btn" onclick="goToSuggest()">
         ✨ Geschichte zaubern
@@ -744,180 +746,84 @@
       }
     }
 
-    // ── Microphone + Waveform ───────────────────
-    const micBtn      = document.getElementById('mic-btn');
-    const textarea    = document.getElementById('story-idee');
-    const waveformBar = document.getElementById('waveform-bar');
-    const waveCanvas  = document.getElementById('waveform-canvas');
-    const waveStatus  = document.getElementById('wave-status');
-    const pauseBtn    = document.getElementById('wf-pause-btn');
+    // ── Microphone (ChatGPT-Style) ──────────────
+    const micBtn   = document.getElementById('mic-btn');
+    const textarea = document.getElementById('story-idee');
+    const recBar   = document.getElementById('rec-bar');
+    const recCancel= document.getElementById('rec-cancel');
+    const recStop  = document.getElementById('rec-stop');
 
-    // State: 'idle' | 'recording' | 'paused'
-    let recState = 'idle';
-    // Snapshot of textarea text before the current recording session started
-    let textBeforeRecord = '';
+    let recActive       = false;
+    let textBeforeRec   = '';   // snapshot before session started
+    let committedText   = '';   // finalized transcription so far
+    let recognition     = null;
 
-    let audioCtx, analyser, micSource, animFrame, micStream;
-
-    // ── Web Audio waveform ────────────────────
-    function startAudio() {
-      navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-        .then(stream => {
-          micStream = stream;
-          audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
-          analyser  = audioCtx.createAnalyser();
-          analyser.fftSize = 128;
-          analyser.smoothingTimeConstant = 0.82;
-          micSource = audioCtx.createMediaStreamSource(stream);
-          micSource.connect(analyser);
-          drawLoop();
-        })
-        .catch(() => { /* mic denied – waveform shows CSS-only */ });
+    function showRecBar() {
+      recBar.classList.add('show');
+      micBtn.style.opacity = '0';
+      micBtn.style.pointerEvents = 'none';
+      textarea.style.paddingBottom = '74px'; // make room for bar
+    }
+    function hideRecBar() {
+      recBar.classList.remove('show');
+      micBtn.style.opacity = '';
+      micBtn.style.pointerEvents = '';
+      textarea.style.paddingBottom = '';
     }
 
-    function stopAudio() {
-      cancelAnimationFrame(animFrame);
-      if (micSource) { micSource.disconnect(); micSource = null; }
-      if (audioCtx)  { audioCtx.close();       audioCtx  = null; }
-      if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
-      analyser = null;
-      const ctx = waveCanvas.getContext('2d');
-      ctx.clearRect(0, 0, waveCanvas.width, waveCanvas.height);
-    }
-
-    function drawLoop() {
-      animFrame = requestAnimationFrame(drawLoop);
-      const dpr = window.devicePixelRatio || 1;
-      const W = waveCanvas.offsetWidth * dpr;
-      const H = waveCanvas.offsetHeight * dpr;
-      if (waveCanvas.width !== W || waveCanvas.height !== H) {
-        waveCanvas.width = W; waveCanvas.height = H;
-      }
-      const ctx = waveCanvas.getContext('2d');
-      ctx.clearRect(0, 0, W, H);
-      if (!analyser) return;
-      const data = new Uint8Array(analyser.frequencyBinCount);
-      analyser.getByteFrequencyData(data);
-      const BAR_COUNT = 44;
-      const slotW = W / BAR_COUNT;
-      const barW  = Math.max(2, slotW * 0.55);
-      const gap   = slotW - barW;
-      for (let i = 0; i < BAR_COUNT; i++) {
-        const di   = Math.floor(i / BAR_COUNT * data.length * 0.55);
-        const norm = data[di] / 255;
-        const minH = 3 * dpr;
-        const barH = minH + norm * (H * 0.86 - minH);
-        const x    = i * slotW + gap / 2;
-        const y    = (H - barH) / 2;
-        ctx.fillStyle = `rgba(229,62,62,${0.55 + norm * 0.45})`;
-        ctx.beginPath();
-        ctx.roundRect(x, y, barW, barH, barW / 2);
-        ctx.fill();
-      }
-    }
-
-    // ── UI helpers ────────────────────────────
-    function setRecordingUI() {
-      waveformBar.classList.add('show');
-      waveformBar.classList.remove('paused');
-      waveStatus.textContent = 'Aufnahme läuft …';
-      pauseBtn.innerHTML = `
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-        Pause`;
-      micBtn.classList.add('listening');
-    }
-
-    function setPausedUI() {
-      waveformBar.classList.add('paused');
-      waveStatus.textContent = 'Pausiert';
-      pauseBtn.innerHTML = `
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
-        Fortsetzen`;
-      micBtn.classList.remove('listening');
-    }
-
-    function setIdleUI() {
-      waveformBar.classList.remove('show', 'paused');
-      micBtn.classList.remove('listening');
-      const ctx = waveCanvas.getContext('2d');
-      ctx.clearRect(0, 0, waveCanvas.width, waveCanvas.height);
-    }
-
-    // ── State machine ─────────────────────────
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      let recognition = null;
 
-      function buildRecognition() {
+      function buildRec() {
         const r = new SR();
-        r.lang = 'de-DE';
-        r.continuous = false;
-        r.interimResults = false;
+        r.lang            = 'de-DE';
+        r.continuous      = true;
+        r.interimResults  = true;
         r.onresult = e => {
-          const t = e.results[0][0].transcript;
-          textarea.value = textarea.value ? textarea.value + ' ' + t : t;
-          // Auto-pause after each result so user can review or continue
-          if (recState === 'recording') pauseRecording();
+          let interim = '';
+          for (let i = e.resultIndex; i < e.results.length; i++) {
+            if (e.results[i].isFinal) {
+              committedText += (committedText ? ' ' : '') + e.results[i][0].transcript.trim();
+            } else {
+              interim += e.results[i][0].transcript;
+            }
+          }
+          textarea.value = committedText + (interim ? ' ' + interim : '');
         };
-        r.onerror = () => { if (recState === 'recording') pauseRecording(); };
-        r.onend   = () => {
-          // Only transition if still "recording" (not already paused/idle)
-          if (recState === 'recording') pauseRecording();
+        r.onerror = e => {
+          if (e.error !== 'aborted') stopRecording(true);
+        };
+        r.onend = () => {
+          // Restart if still active (iOS Safari stops after silence)
+          if (recActive) { try { r.start(); } catch {} }
         };
         return r;
       }
 
       function startRecording() {
-        textBeforeRecord = textarea.value;
-        recState = 'recording';
-        recognition = buildRecognition();
-        recognition.start();
-        startAudio();
-        setRecordingUI();
+        textBeforeRec = textarea.value;
+        committedText = textarea.value; // keep existing text as base
+        recActive = true;
+        recognition = buildRec();
+        try { recognition.start(); } catch {}
+        showRecBar();
       }
 
-      function pauseRecording() {
-        recState = 'paused';
-        try { recognition.stop(); } catch {}
-        stopAudio();
-        setPausedUI();
+      function stopRecording(cancel = false) {
+        recActive = false;
+        try { recognition.abort(); } catch {}
+        recognition = null;
+        if (cancel) textarea.value = textBeforeRec;
+        hideRecBar();
       }
 
-      function resumeRecording() {
-        recState = 'recording';
-        recognition = buildRecognition();
-        recognition.start();
-        startAudio();
-        setRecordingUI();
-      }
-
-      // Global: called by Pause/Fortsetzen button
-      window.togglePause = () => {
-        if (recState === 'recording') pauseRecording();
-        else if (recState === 'paused') resumeRecording();
-      };
-
-      // Global: called by Löschen button
-      window.deleteRecording = () => {
-        recState = 'idle';
-        try { recognition.stop(); } catch {}
-        stopAudio();
-        textarea.value = textBeforeRecord; // restore pre-recording text
-        setIdleUI();
-      };
-
-      // Mic button: toggle start / pause
-      micBtn.addEventListener('click', () => {
-        if (recState === 'idle')      startRecording();
-        else if (recState === 'recording') pauseRecording();
-        else if (recState === 'paused')    resumeRecording();
-      });
+      micBtn.addEventListener('click', () => { if (!recActive) startRecording(); });
+      recStop.addEventListener('click',   () => stopRecording(false));
+      recCancel.addEventListener('click', () => stopRecording(true));
 
     } else {
       micBtn.style.opacity = '.45';
       micBtn.title = 'Mikrofon-Eingabe wird von diesem Browser nicht unterstützt';
-      window.togglePause  = () => {};
-      window.deleteRecording = () => {};
     }
   </script>
 </body>
