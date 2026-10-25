@@ -187,11 +187,11 @@
       padding: 0 16px;
     }
     .waveform-bar.show {
-      max-height: 120px;
+      max-height: 160px;
       opacity: 1;
-      padding: 16px 16px 12px;
+      padding: 14px 16px 12px;
     }
-    #waveform-canvas { width: 100%; height: 60px; display: block; }
+    #waveform-canvas { width: 100%; height: 56px; display: block; }
     .waveform-label {
       font-size: .8rem;
       font-weight: 800;
@@ -201,13 +201,45 @@
       align-items: center;
       gap: 6px;
     }
+    .waveform-bar.paused .waveform-label { color: var(--muted); }
+    .waveform-bar.paused #waveform-canvas { opacity: .35; }
     .waveform-dot {
       width: 8px; height: 8px;
       background: #e53e3e;
       border-radius: 50%;
       animation: blink .9s ease-in-out infinite;
     }
+    .waveform-bar.paused .waveform-dot {
+      background: var(--muted);
+      animation: none;
+    }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+    /* Pause / Delete controls */
+    .waveform-controls {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+    .wf-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 7px 10px;
+      border-radius: 50px;
+      border: 2px solid;
+      font-family: 'Nunito', sans-serif;
+      font-size: .8rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .wf-btn-pause  { border-color: #e53e3e; color: #e53e3e; background: white; }
+    .wf-btn-pause:hover  { background: #e53e3e; color: white; }
+    .wf-btn-delete { border-color: #d1b08a; color: var(--muted); background: white; }
+    .wf-btn-delete:hover { background: #f5ece0; }
 
     .s1-hint {
       text-align: center;
@@ -500,8 +532,18 @@
       <div class="waveform-bar" id="waveform-bar">
         <canvas id="waveform-canvas"></canvas>
         <div class="waveform-label">
-          <span class="waveform-dot"></span>
-          Aufnahme läuft … Tippe auf das Mikrofon zum Stoppen
+          <span class="waveform-dot" id="wave-dot"></span>
+          <span id="wave-status">Aufnahme läuft …</span>
+        </div>
+        <div class="waveform-controls">
+          <button class="wf-btn wf-btn-pause" id="wf-pause-btn" onclick="togglePause()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+            Pause
+          </button>
+          <button class="wf-btn wf-btn-delete" onclick="deleteRecording()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Löschen
+          </button>
         </div>
       </div>
 
@@ -692,10 +734,18 @@
     const textarea    = document.getElementById('story-idee');
     const waveformBar = document.getElementById('waveform-bar');
     const waveCanvas  = document.getElementById('waveform-canvas');
+    const waveStatus  = document.getElementById('wave-status');
+    const pauseBtn    = document.getElementById('wf-pause-btn');
+
+    // State: 'idle' | 'recording' | 'paused'
+    let recState = 'idle';
+    // Snapshot of textarea text before the current recording session started
+    let textBeforeRecord = '';
 
     let audioCtx, analyser, micSource, animFrame, micStream;
 
-    function startWaveform() {
+    // ── Web Audio waveform ────────────────────
+    function startAudio() {
       navigator.mediaDevices.getUserMedia({ audio: true, video: false })
         .then(stream => {
           micStream = stream;
@@ -705,102 +755,154 @@
           analyser.smoothingTimeConstant = 0.82;
           micSource = audioCtx.createMediaStreamSource(stream);
           micSource.connect(analyser);
-          waveformBar.classList.add('show');
           drawLoop();
         })
-        .catch(() => {
-          // Microphone denied or unavailable — show CSS fallback only
-          waveformBar.classList.add('show');
-        });
+        .catch(() => { /* mic denied – waveform shows CSS-only */ });
     }
 
-    function stopWaveform() {
+    function stopAudio() {
       cancelAnimationFrame(animFrame);
       if (micSource) { micSource.disconnect(); micSource = null; }
       if (audioCtx)  { audioCtx.close();       audioCtx  = null; }
       if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
       analyser = null;
-      waveformBar.classList.remove('show');
-      // Clear canvas
       const ctx = waveCanvas.getContext('2d');
       ctx.clearRect(0, 0, waveCanvas.width, waveCanvas.height);
     }
 
     function drawLoop() {
       animFrame = requestAnimationFrame(drawLoop);
-
       const dpr = window.devicePixelRatio || 1;
-      const W   = waveCanvas.offsetWidth  * dpr;
-      const H   = waveCanvas.offsetHeight * dpr;
+      const W = waveCanvas.offsetWidth * dpr;
+      const H = waveCanvas.offsetHeight * dpr;
       if (waveCanvas.width !== W || waveCanvas.height !== H) {
-        waveCanvas.width  = W;
-        waveCanvas.height = H;
+        waveCanvas.width = W; waveCanvas.height = H;
       }
-
       const ctx = waveCanvas.getContext('2d');
       ctx.clearRect(0, 0, W, H);
-
       if (!analyser) return;
       const data = new Uint8Array(analyser.frequencyBinCount);
       analyser.getByteFrequencyData(data);
-
       const BAR_COUNT = 44;
-      const totalW    = W;
-      const slotW     = totalW / BAR_COUNT;
-      const barW      = Math.max(2, slotW * 0.55);
-      const gap       = slotW - barW;
-
+      const slotW = W / BAR_COUNT;
+      const barW  = Math.max(2, slotW * 0.55);
+      const gap   = slotW - barW;
       for (let i = 0; i < BAR_COUNT; i++) {
-        // Use lower half of spectrum (voice range)
-        const di    = Math.floor(i / BAR_COUNT * data.length * 0.55);
-        const norm  = data[di] / 255;
-        const minH  = 3 * dpr;
-        const barH  = minH + norm * (H * 0.86 - minH);
-        const x     = i * slotW + gap / 2;
-        const y     = (H - barH) / 2;
-        const alpha = 0.55 + norm * 0.45;
-
-        ctx.fillStyle = `rgba(229, 62, 62, ${alpha})`;
+        const di   = Math.floor(i / BAR_COUNT * data.length * 0.55);
+        const norm = data[di] / 255;
+        const minH = 3 * dpr;
+        const barH = minH + norm * (H * 0.86 - minH);
+        const x    = i * slotW + gap / 2;
+        const y    = (H - barH) / 2;
+        ctx.fillStyle = `rgba(229,62,62,${0.55 + norm * 0.45})`;
         ctx.beginPath();
-        const r = barW / 2;
-        ctx.roundRect(x, y, barW, barH, r);
+        ctx.roundRect(x, y, barW, barH, barW / 2);
         ctx.fill();
       }
     }
 
+    // ── UI helpers ────────────────────────────
+    function setRecordingUI() {
+      waveformBar.classList.add('show');
+      waveformBar.classList.remove('paused');
+      waveStatus.textContent = 'Aufnahme läuft …';
+      pauseBtn.innerHTML = `
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+        Pause`;
+      micBtn.classList.add('listening');
+    }
+
+    function setPausedUI() {
+      waveformBar.classList.add('paused');
+      waveStatus.textContent = 'Pausiert';
+      pauseBtn.innerHTML = `
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        Fortsetzen`;
+      micBtn.classList.remove('listening');
+    }
+
+    function setIdleUI() {
+      waveformBar.classList.remove('show', 'paused');
+      micBtn.classList.remove('listening');
+      const ctx = waveCanvas.getContext('2d');
+      ctx.clearRect(0, 0, waveCanvas.width, waveCanvas.height);
+    }
+
+    // ── State machine ─────────────────────────
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognition = new SR();
-      recognition.lang = 'de-DE';
-      recognition.continuous = false;
-      recognition.interimResults = false;
+      let recognition = null;
 
-      const stopRecording = () => {
-        micBtn.classList.remove('listening');
-        stopWaveform();
+      function buildRecognition() {
+        const r = new SR();
+        r.lang = 'de-DE';
+        r.continuous = false;
+        r.interimResults = false;
+        r.onresult = e => {
+          const t = e.results[0][0].transcript;
+          textarea.value = textarea.value ? textarea.value + ' ' + t : t;
+          // Auto-pause after each result so user can review or continue
+          if (recState === 'recording') pauseRecording();
+        };
+        r.onerror = () => { if (recState === 'recording') pauseRecording(); };
+        r.onend   = () => {
+          // Only transition if still "recording" (not already paused/idle)
+          if (recState === 'recording') pauseRecording();
+        };
+        return r;
+      }
+
+      function startRecording() {
+        textBeforeRecord = textarea.value;
+        recState = 'recording';
+        recognition = buildRecognition();
+        recognition.start();
+        startAudio();
+        setRecordingUI();
+      }
+
+      function pauseRecording() {
+        recState = 'paused';
+        try { recognition.stop(); } catch {}
+        stopAudio();
+        setPausedUI();
+      }
+
+      function resumeRecording() {
+        recState = 'recording';
+        recognition = buildRecognition();
+        recognition.start();
+        startAudio();
+        setRecordingUI();
+      }
+
+      // Global: called by Pause/Fortsetzen button
+      window.togglePause = () => {
+        if (recState === 'recording') pauseRecording();
+        else if (recState === 'paused') resumeRecording();
       };
 
-      recognition.onresult = e => {
-        const transcript = e.results[0][0].transcript;
-        textarea.value = textarea.value ? textarea.value + ' ' + transcript : transcript;
-        stopRecording();
+      // Global: called by Löschen button
+      window.deleteRecording = () => {
+        recState = 'idle';
+        try { recognition.stop(); } catch {}
+        stopAudio();
+        textarea.value = textBeforeRecord; // restore pre-recording text
+        setIdleUI();
       };
-      recognition.onerror = stopRecording;
-      recognition.onend   = stopRecording;
 
+      // Mic button: toggle start / pause
       micBtn.addEventListener('click', () => {
-        if (micBtn.classList.contains('listening')) {
-          recognition.stop();
-          stopRecording();
-        } else {
-          recognition.start();
-          micBtn.classList.add('listening');
-          startWaveform();
-        }
+        if (recState === 'idle')      startRecording();
+        else if (recState === 'recording') pauseRecording();
+        else if (recState === 'paused')    resumeRecording();
       });
+
     } else {
       micBtn.style.opacity = '.45';
       micBtn.title = 'Mikrofon-Eingabe wird von diesem Browser nicht unterstützt';
+      window.togglePause  = () => {};
+      window.deleteRecording = () => {};
     }
   </script>
 </body>
