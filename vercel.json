@@ -1,10 +1,13 @@
 {
-  "rewrites": [
+  "redirects": [
     {
-      "source": "/(.*)",
+      "source": "/",
       "has": [{ "type": "host", "value": "zaubern.vorlesen.de" }],
-      "destination": "/story-creator.html"
-    },
+      "destination": "/story-creator.html",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
     { "source": "/((?!api/)(?!\\.html$)(?!.*\\.html$).*)", "destination": "/index.html" }
   ]
 }
