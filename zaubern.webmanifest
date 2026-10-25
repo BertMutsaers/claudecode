@@ -2,11 +2,12 @@
   "name": "Geschichte zaubern",
   "short_name": "Zaubern",
   "description": "Eigene Kindergeschichten einsprechern und zaubern lassen",
-  "start_url": "/",
+  "start_url": "/story-creator.html",
   "display": "standalone",
   "background_color": "#eef4ff",
   "theme_color": "#2563eb",
   "icons": [
-    { "src": "/images/zaubern-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/images/zaubern-icon.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
