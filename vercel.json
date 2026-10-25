@@ -1,5 +1,10 @@
 {
   "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "zaubern.vorlesen.de" }],
+      "destination": "/story-creator.html"
+    },
+    { "source": "/((?!api/)(?!\\.html$)(?!.*\\.html$).*)", "destination": "/index.html" }
   ]
 }
