@@ -264,6 +264,31 @@
       line-height: 1.5;
     }
 
+    .s1-restore {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .s1-restore span { flex: 1; }
+    .s1-restore button {
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .s1-restore #s1-restore-btn     { background: var(--primary); color: white; }
+    .s1-restore #s1-restore-dismiss { background: #e5e7eb; color: #374151; }
+
     .s1-btn {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
@@ -562,6 +587,12 @@
         </div>
       </div>
 
+      <div id="s1-restore" style="display:none" class="s1-restore">
+        <span>📝 Letzten Text wiederherstellen?</span>
+        <button id="s1-restore-btn">Ja</button>
+        <button id="s1-restore-dismiss">Nein</button>
+      </div>
+
       <p class="s1-hint">Tippe deine Idee ein oder tippe das Mikrofon und sprich einfach drauflos.</p>
 
       <button class="s1-btn" id="sc1-btn" onclick="goToSuggest()">
@@ -750,6 +781,7 @@
         }
 
         hideLoading();
+        localStorage.removeItem(DRAFT_KEY);
         showScreen('screen-success');
       } catch (e) {
         clearInterval(interval);
@@ -760,10 +792,42 @@
       }
     }
 
+    // ── Auto-save to localStorage ──────────────
+    const DRAFT_KEY = 'vorlesen_story_draft';
+    const textarea  = document.getElementById('story-idee');
+
+    // Restore draft on page load
+    const savedDraft = localStorage.getItem(DRAFT_KEY);
+    if (savedDraft) {
+      const restore = document.getElementById('s1-restore');
+      restore.style.display = 'block';
+      document.getElementById('s1-restore-btn').addEventListener('click', () => {
+        textarea.value = savedDraft;
+        textarea.scrollTop = textarea.scrollHeight;
+        restore.style.display = 'none';
+      });
+      document.getElementById('s1-restore-dismiss').addEventListener('click', () => {
+        localStorage.removeItem(DRAFT_KEY);
+        restore.style.display = 'none';
+      });
+    }
+
+    function saveDraft() {
+      if (textarea.value.trim()) localStorage.setItem(DRAFT_KEY, textarea.value);
+      else localStorage.removeItem(DRAFT_KEY);
+    }
+    textarea.addEventListener('input', () => {
+      textarea.scrollTop = textarea.scrollHeight;
+      saveDraft();
+    });
+
+    // Warn before navigating away when there is unsaved text
+    window.addEventListener('beforeunload', e => {
+      if (textarea.value.trim()) { e.preventDefault(); e.returnValue = ''; }
+    });
+
     // ── Microphone (Whisper via MediaRecorder) ──────────────
     const micBtn    = document.getElementById('mic-btn');
-    const textarea  = document.getElementById('story-idee');
-    textarea.addEventListener('input', () => { textarea.scrollTop = textarea.scrollHeight; });
     const recBar    = document.getElementById('rec-bar');
     const recCancel = document.getElementById('rec-cancel');
     const recStop   = document.getElementById('rec-stop');
@@ -810,9 +874,9 @@
           const existing = textBeforeRec.trim();
           textarea.value = existing + (existing ? ' ' : '') + data.text;
           textarea.scrollTop = textarea.scrollHeight;
+          saveDraft();
         }
       } catch (e) {
-        textarea.value = textBeforeRec;
         alert('Transkription fehlgeschlagen: ' + (e.message || 'Unbekannter Fehler'));
       } finally {
         hideRecBar();
@@ -855,7 +919,7 @@
           mediaRecorder.stream?.getTracks().forEach(t => t.stop());
           mediaRecorder = null;
         }
-        textarea.value = textBeforeRec;
+        // Keep the text — only stop the recording, don't revert
         hideRecBar();
       });
 
