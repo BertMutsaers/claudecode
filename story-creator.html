@@ -68,68 +68,56 @@
 
     .s1-hero {
       background: linear-gradient(168deg, #dbeafe 0%, #bfdbfe 100%);
-      padding: 20px 24px 32px;
+      padding: 10px 20px 14px;
       position: relative;
       overflow: hidden;
-      text-align: center;
-      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
     }
 
-    /* floating stars */
-    .s1-stars span {
-      position: absolute;
-      color: var(--star);
-      font-size: 1.1rem;
-      animation: starFloat 2.8s ease-in-out infinite alternate;
-      pointer-events: none;
-    }
-    @keyframes starFloat {
-      0%   { transform: translateY(0) rotate(0deg);   opacity: .7; }
-      100% { transform: translateY(-7px) rotate(18deg); opacity: 1; }
-    }
+    /* floating stars – hidden in compact mode */
+    .s1-stars { display: none; }
 
     .s1-dragon {
-      font-size: 4.5rem;
+      font-size: 2.4rem;
       line-height: 1;
-      filter: drop-shadow(2px 6px 10px rgba(0,0,0,.12));
-      position: relative;
-      z-index: 1;
+      flex-shrink: 0;
     }
 
+    .s1-hero-text { flex: 1; }
+
     .s1-title {
-      font-size: 1.7rem;
+      font-size: 1.15rem;
       font-weight: 900;
       line-height: 1.2;
-      margin-top: 10px;
-      position: relative;
-      z-index: 1;
     }
     .s1-title .hl {
       color: var(--primary);
-      text-decoration: underline;
-      text-decoration-color: var(--primary);
-      text-underline-offset: 4px;
     }
 
     .s1-subtitle {
-      font-size: .95rem;
+      font-size: .8rem;
       font-weight: 600;
       color: var(--muted);
-      margin-top: 6px;
-      position: relative;
-      z-index: 1;
+      margin-top: 2px;
     }
 
     .s1-body {
       flex: 1;
-      padding: 24px 20px;
+      padding: 14px 16px 12px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
+      min-height: 0;
     }
 
     .s1-textarea-wrap {
       position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
       background: var(--card);
       border-radius: 20px;
       box-shadow: 0 4px 24px rgba(37,99,235,.1);
@@ -142,7 +130,8 @@
     }
     .s1-textarea {
       width: 100%;
-      min-height: 150px;
+      flex: 1;
+      min-height: 220px;
       padding: 20px 58px 20px 20px;
       border: none;
       outline: none;
@@ -523,10 +512,10 @@
         <span style="top:25%;left:52%;font-size:.75rem;animation-delay:.9s">✦</span>
       </div>
       <div class="s1-dragon">🐉</div>
-      <h1 class="s1-title">
-        Welche Geschichte<br><span class="hl">zaubern</span> wir heute?
-      </h1>
-      <p class="s1-subtitle">Deine Fantasie. Deine Geschichte.</p>
+      <div class="s1-hero-text">
+        <h1 class="s1-title">Welche Geschichte <span class="hl">zaubern</span> wir heute?</h1>
+        <p class="s1-subtitle">Deine Fantasie. Deine Geschichte.</p>
+      </div>
     </div>
 
     <div class="s1-body">
@@ -758,6 +747,7 @@
     // ── Microphone (ChatGPT-Style) ──────────────
     const micBtn   = document.getElementById('mic-btn');
     const textarea = document.getElementById('story-idee');
+    textarea.addEventListener('input', () => { textarea.scrollTop = textarea.scrollHeight; });
     const recBar   = document.getElementById('rec-bar');
     const recCancel= document.getElementById('rec-cancel');
     const recStop  = document.getElementById('rec-stop');
@@ -798,6 +788,7 @@
             }
           }
           textarea.value = committedText + (interim ? ' ' + interim : '');
+          textarea.scrollTop = textarea.scrollHeight;
         };
         r.onerror = e => {
           if (e.error !== 'aborted') stopRecording(true);
