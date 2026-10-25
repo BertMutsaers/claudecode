@@ -1094,6 +1094,23 @@
             geschichtenTexte[s.titel] = s.titel + '\n\n' + byLine + s.text;
           }
         });
+
+        // Deep-link: ?story=TITEL springt direkt zur Geschichte
+        const storyParam = new URLSearchParams(window.location.search).get('story');
+        if (storyParam) {
+          const match = stories.find(s => s.titel === storyParam);
+          if (match) {
+            const bild = KAT_BILDER[match.kategorie] || 'images/kat-abenteuer.jpg';
+            // Sicherstellen dass Geschichten-Tab aktiv ist
+            document.querySelectorAll('.top-tab').forEach(b => b.classList.remove('active'));
+            document.querySelector('.geschichten-tab').classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-geschichten').classList.add('active');
+            // Kategorie-Ebene überspringen, direkt zur Geschichte
+            zeigeEbene2('Neu');
+            zeigeEbene3(match.titel, bild, '');
+          }
+        }
       } catch {}
     }
 

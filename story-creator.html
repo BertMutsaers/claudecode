@@ -629,7 +629,7 @@
         <div class="s3-pautor"  id="s3-autor"></div>
         <div class="s3-ptext"   id="s3-preview"></div>
       </div>
-      <a href="/" class="s3-home">📖 Zur Startseite</a>
+      <a id="s3-link" href="https://vorlesen.de" class="s3-home">📖 Geschichte lesen</a>
       <p class="s3-note">
         💡 Die Geschichte ist zunächst als Text verfügbar.<br>
         Füge später eine MP3-Datei hinzu, damit sie vorgelesen werden kann.
@@ -738,9 +738,11 @@
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const data = await resp.json();
 
-        document.getElementById('s3-titel').textContent   = data.titel || titel;
+        const finalTitel = data.titel || titel;
+        document.getElementById('s3-titel').textContent   = finalTitel;
         document.getElementById('s3-autor').textContent   = data.autor ? `von ${data.autor}` : '';
         document.getElementById('s3-preview').textContent = (data.text || '').slice(0, 320);
+        document.getElementById('s3-link').href = 'https://vorlesen.de/?story=' + encodeURIComponent(finalTitel);
 
         hideLoading();
         showScreen('screen-success');
