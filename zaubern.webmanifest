@@ -7,7 +7,7 @@
   "background_color": "#eef4ff",
   "theme_color": "#2563eb",
   "icons": [
-    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
-    { "src": "/images/zaubern-icon.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "https://zaubern.vorlesen.de/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "https://zaubern.vorlesen.de/images/zaubern-icon.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
