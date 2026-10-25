@@ -773,7 +773,7 @@ footer.footer-alle     { background: #43a047; }
 .kat-neu-badge { font-size: 1em; }
 
 /* ── VORLESER KACHELN ──────────────────────────────────────────────── */
-.vorleser-grid { grid-template-columns: repeat(3, 1fr); }
+.vorleser-grid { grid-template-columns: repeat(2, 1fr); }
 .kategorie-card.vorleser-card { background: #eff6ff !important; }
 .kategorie-card.vorleser-card h3 { color: var(--blue-dark) !important; }
 .kategorie-card.vorleser-card:hover { box-shadow: 0 8px 32px rgba(37,99,235,0.18) !important; }
