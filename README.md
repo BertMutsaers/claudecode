@@ -1,17 +1,25 @@
 # vorlesen.de
 
-Kindgerechte Vorlesewebsite für Kinder von 3–6 Jahren mit KI-gestützten Features für Vorleser.
+Kindgerechte Vorlesewebsite mit KI-Geschichtengenerator. Kinder hören sich Geschichten an, Vorleser können per Handy eigene Geschichten einsprechen und von der KI ausformulieren lassen.
 
-**Live:** [vorlesen.de](https://vorlesen.de)
+**Live:** [vorlesen.de](https://vorlesen.de) · [zaubern.vorlesen.de](https://zaubern.vorlesen.de)
 
 ---
 
-## Konzept
+## Was die Seite kann
 
-Die Seite richtet sich an zwei Zielgruppen:
+**Für Kinder**
+- 64 Kurzgeschichten in 8 Kategorien (Tiere, Abenteuer, Einschlafen, Lustig, Lernen, Weihnachten, Mut, Freundschaft)
+- Jede Geschichte mit Bild und MP3-Audiodatei
+- Nutzergenerierte Geschichten erscheinen automatisch in der Kategorie „Neu"
 
-- **Kinder (3–6 Jahre):** Zugang zu 64 Kurzgeschichten in 9 Kategorien, jeweils mit Bild und MP3-Audiodatei
-- **Vorleser (Eltern, Erzieher):** KI-gestützte Tools wie Vorlesetipps, Buchempfehlungen und ein Geschichtengenerator
+**Für Vorleser**
+- KI-Vorlesetipps und Buchempfehlungen (Claude API)
+- Eigene Geschichte eintippen oder per Handy einsprechen → KI schreibt die vollständige Geschichte und generiert eine Bleistiftzeichnung-Illustration (DALL-E 3)
+
+**Subdomain zaubern.vorlesen.de**
+- Optimiert fürs Handy, PWA-fähig (Home-Screen-Icon)
+- 3-Screen-Flow: Idee eingeben → KI-Vorschlag prüfen → fertige Geschichte lesen
 
 ---
 
@@ -20,10 +28,11 @@ Die Seite richtet sich an zwei Zielgruppen:
 | Bereich | Technologie |
 |---|---|
 | Frontend | Reines HTML/CSS/JavaScript – kein Framework |
-| Hosting | [Vercel](https://vercel.com) |
-| API-Proxy | Vercel Serverless Function (`/api/claude.js`) |
-| KI | Anthropic Claude API (`claude-3-5-haiku-20241022`) |
-| Paketmanager | npm (nur für `@anthropic-ai/sdk` im Backend) |
+| Hosting | Vercel (Auto-Deploy aus `main`) |
+| Story-Speicher | Upstash Redis (REST API) |
+| KI Text | Anthropic Claude (`claude-sonnet-4-5`) |
+| KI Bild | OpenAI DALL-E 3 |
+| Spracherkennung | Web Speech API (Browser-nativ, kein Server) |
 
 ---
 
@@ -31,124 +40,140 @@ Die Seite richtet sich an zwei Zielgruppen:
 
 ```
 /
-├── index.html          # Komplette App (3 Tabs, Navigation, alle JS-Logik)
-├── style.css           # Alle Styles (inkl. Animationen, responsiv)
-├── geschichten.js      # 64 Geschichtstexte als JS-Objekt (277 KB)
-├── package.json        # Backend-Abhängigkeit: @anthropic-ai/sdk
-├── .vercelignore       # node_modules von Deployment ausschließen
+├── index.html            # Hauptseite (Kinder-Tab, Vorleser-Tab, Navigation)
+├── style.css             # Alle Styles für index.html
+├── story-creator.html    # Geschichtengenerator (zaubern.vorlesen.de)
+├── admin.html            # Admin-Oberfläche (Geschichten verwalten, löschen)
+├── geschichten.js        # 64 eingebaute Geschichtstexte als JS-Objekt
+├── vercel.json           # Routing, Redirects, cleanUrls
+├── zaubern.webmanifest   # PWA-Manifest für zaubern.vorlesen.de
+├── apple-touch-icon.png  # Home-Screen-Icon (180×180 px)
 │
 ├── api/
-│   └── claude.js       # Vercel Serverless Function – Proxy zur Anthropic API
+│   ├── claude.js         # Proxy zur Anthropic API (für Vorlesetipps, Buchempfehlung)
+│   ├── story-suggest.js  # Schlägt Titel + Kategorie für eine Idee vor
+│   ├── story-save.js     # Generiert Geschichte (Claude) + Bild (DALL-E) und speichert in Redis
+│   ├── stories.js        # Gibt alle User-Geschichten aus Redis zurück
+│   ├── story-admin.js    # Admin-API: Geschichten auflisten, bearbeiten, löschen
+│   └── counter.js        # Besucher-Zähler (täglich + gesamt via Redis)
 │
-├── images/             # 79 Bilder (Kategorien + Stories + UI)
-│   ├── kat-*.jpg       # 8 Kategorie-Titelbilder
-│   ├── *.jpg           # Story-Titelbilder (1 pro Geschichte)
-│   └── *.jpg           # UI-Bilder (bert.jpg, vorlesetips.jpg, …)
-│
-└── audio/              # 64 MP3-Dateien (1 pro Geschichte)
-    ├── abenteuer-1.mp3
-    ├── weihnachten-8.mp3
-    └── …
+├── images/               # Kategorie- und Storybiler
+└── audio/                # MP3-Dateien (64 eingebaute Geschichten)
 ```
 
 ---
 
-## Navigation (3-Ebenen-System im Kinder-Tab)
+## Geschichtengenerator-Flow (story-creator.html)
 
 ```
-Ebene 1 – Kategorieübersicht (9 Kacheln)
-    ↓ Klick auf Kategorie
-Ebene 2 – Geschichtenliste (bis zu 8 Geschichten)
-    ↓ Klick auf Geschichte
-Ebene 3 – Leseansicht (Bild + Text + Audioplayer)
+Screen 1 – Idee eingeben
+  Text tippen oder per Mikrofon einsprechen (Web Speech API → Transkription)
+    ↓ "KI-Vorschlag" klicken
+Screen 2 – KI-Vorschlag
+  Claude schlägt Titel und Kategorie vor → User kann anpassen, Autorname eintragen
+    ↓ "Geschichte jetzt generieren" klicken
+Screen 3 – Fertig
+  Claude schreibt die Geschichte, DALL-E 3 generiert eine Bleistiftzeichnung
+  Beide Requests laufen parallel → kaum Mehrzeit
+  Link springt direkt zur neuen Geschichte auf vorlesen.de
 ```
-
-Ein Klick auf einen der oberen Tabs (Für Kinder / Für Vorleser / Für Alle) bringt immer zurück auf Ebene 1.
 
 ---
 
-## KI-Features (Tab „Für Vorleser")
+## API-Endpunkte
 
-Alle drei Features rufen intern `/api/claude` auf (POST), der wiederum die Anthropic API aufruft. Der API-Key liegt **nur** auf Vercel als Umgebungsvariable – nie im Frontend-Code.
+### `POST /api/story-suggest`
+Schlägt Titel und Kategorie für eine Idee vor.
+```json
+// Request
+{ "idee": "Ein Drache, der Angst vor Feuer hat" }
 
-### Vorlesetipps
-Statisch, kein API-Call. 8 redaktionelle Tipps mit Detailansicht.
-
-### Buchempfehlung
-- Nutzer gibt Alter und Interessen ein
-- API-Call: `claude-3-5-haiku-20241022`, max. 400 Tokens
-- Gibt 3 konkrete Buchempfehlungen mit Begründung zurück
-
-### Geschichtengenerator
-- Nutzer wählt Thema, Länge, Hauptfigur, Grobe Handlung
-- Beispiel-Prompts als klickbare Chips hinterlegt
-- API-Call: `claude-3-5-haiku-20241022`, max. 800 Tokens
-- Gibt eine fertige Kurzgeschichte zurück
-
----
-
-## API-Proxy (`/api/claude.js`)
-
-Die Serverless Function ist ein schlanker Durchreicher:
-
-```
-Browser → POST /api/claude → Vercel Function → Anthropic API → Antwort zurück
+// Response
+{ "titel": "Feuerscheu – der ängstliche Drache", "kategorie": "Abenteuer" }
 ```
 
-Der Request-Body vom Frontend wird 1:1 an `client.messages.create()` weitergegeben. So kann das Frontend beliebige Modelle, Tokens und Prompts übergeben, ohne den API-Key zu kennen.
+### `POST /api/story-save`
+Generiert Geschichte + Illustration und speichert beides in Redis.
+```json
+// Request
+{ "titel": "...", "kategorie": "...", "idee": "...", "autor": "Anna" }
+
+// Response
+{ "id": "1700000000000", "titel": "...", "text": "...", "imageUrl": "https://..." }
+```
+
+### `GET /api/stories`
+Gibt alle User-Geschichten zurück (neueste zuerst).
+
+### `GET /api/story-admin?pw=PASSWORT`
+Gibt alle Geschichten zurück (nur mit Admin-Kennwort).
+
+### `POST /api/story-admin`
+Bearbeitet oder löscht eine Geschichte.
+```json
+{ "pw": "...", "action": "delete"|"update", "id": "...", "titel": "..." }
+```
 
 ---
 
 ## Lokale Entwicklung
 
 ```bash
-npm install -g vercel
 npm install
-vercel dev          # startet lokalen Dev-Server inkl. /api/ Endpunkte
+vercel dev    # startet lokalen Dev-Server inkl. /api/ Endpunkte auf Port 3000
 ```
 
-Für die KI-Features wird ein `.env.local` mit folgendem Inhalt benötigt:
-
+`.env.local` für lokale API-Calls:
 ```
 ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
+ADMIN_PASSWORD=...
+UPSTASH_REDIS_REST_URL=https://...
+UPSTASH_REDIS_REST_TOKEN=...
 ```
 
 ---
 
 ## Deployment
 
-Automatisch über Vercel bei Push auf `main`:
-
+Push auf `main` deployt automatisch auf Vercel:
 ```bash
 git push origin main
-```
-
-Oder manuell:
-
-```bash
-vercel --prod
 ```
 
 ---
 
 ## Umgebungsvariablen (Vercel)
 
-| Variable | Beschreibung |
+| Variable | Wofür |
 |---|---|
-| `ANTHROPIC_API_KEY` | API-Key für die Anthropic Claude API |
-
-Setzen via: `vercel env add ANTHROPIC_API_KEY`
+| `ANTHROPIC_API_KEY` | Claude (Texte, Vorschläge, Vorlesetipps) |
+| `OPENAI_API_KEY` | DALL-E 3 (Illustrationen) |
+| `ADMIN_PASSWORD` | Zugang zu admin.html |
+| `UPSTASH_REDIS_REST_URL` | User-Geschichten speichern/abrufen |
+| `UPSTASH_REDIS_REST_TOKEN` | Authentifizierung bei Upstash |
 
 ---
 
-## Kategorien & Inhalte
+## Story-Datenmodell (Redis)
 
-9 Kategorien mit je 8 Geschichten (= 64 gesamt):
+Geschichten werden als JSON-Strings in einer Redis-Liste (`user_stories`) gespeichert, neueste zuerst (LPUSH).
 
-`abenteuer` · `freundschaft` · `tiere` · `natur` · `fantasie` · `alltag` · `mut` · `humor` · `weihnachten`
+```json
+{
+  "id": "1700000000000",
+  "titel": "Der mutige Fuchs",
+  "kategorie": "Mut",
+  "idee": "Ein Fuchs überwindet seine Angst vor dem dunklen Wald",
+  "autor": "Anna",
+  "text": "Es war einmal...",
+  "imageUrl": "https://oaidalleapiprodscus.blob.core.windows.net/...",
+  "created": "2026-10-25T10:00:00.000Z"
+}
+```
 
-Jede Geschichte hat:
-- Einen Titel
-- Ein Titelbild (`images/<name>.jpg`)
-- Einen Text (in `geschichten.js`)
-- Eine MP3-Datei (`audio/<kategorie>-<nr>.mp3`)
+---
+
+## Deep-Link
+
+`vorlesen.de/?story=TITEL` öffnet die Geschichte direkt. Wird vom Geschichtengenerator auf Screen 3 automatisch gesetzt.
