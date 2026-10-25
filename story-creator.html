@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Geschichte zaubern | vorlesen.de</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:      #FDF6EE;
+      --primary: #C17B2F;
+      --primary-dark: #A06220;
+      --text:    #2D1B00;
+      --muted:   #7A5C3A;
+      --star:    #F5B942;
+      --card:    #FFFFFF;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+      overscroll-behavior: none;
+    }
+
+    /* ── SCREEN SYSTEM ── */
+    .screen {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+      max-width: 430px;
+      margin: 0 auto;
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+    .screen.active { display: flex; }
+
+    /* ══════════════════════════════════════════
+       SCREEN 1 — INPUT
+    ══════════════════════════════════════════ */
+
+    .s1-topbar {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px 0;
+    }
+    .s1-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .s1-logo img { height: 26px; }
+
+    .s1-hero {
+      background: linear-gradient(168deg, #FFF3DC 0%, #FFE5B8 100%);
+      padding: 20px 24px 32px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    /* floating stars */
+    .s1-stars span {
+      position: absolute;
+      color: var(--star);
+      font-size: 1.1rem;
+      animation: starFloat 2.8s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes starFloat {
+      0%   { transform: translateY(0) rotate(0deg);   opacity: .7; }
+      100% { transform: translateY(-7px) rotate(18deg); opacity: 1; }
+    }
+
+    .s1-dragon {
+      font-size: 4.5rem;
+      line-height: 1;
+      filter: drop-shadow(2px 6px 10px rgba(0,0,0,.12));
+      position: relative;
+      z-index: 1;
+    }
+
+    .s1-title {
+      font-size: 1.7rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-top: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .s1-title .hl {
+      color: var(--primary);
+      text-decoration: underline;
+      text-decoration-color: var(--primary);
+      text-underline-offset: 4px;
+    }
+
+    .s1-subtitle {
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .s1-body {
+      flex: 1;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .s1-textarea-wrap {
+      position: relative;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.08);
+    }
+    .s1-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 20px 58px 20px 20px;
+      border: none;
+      outline: none;
+      resize: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      background: transparent;
+      border-radius: 20px;
+      line-height: 1.6;
+    }
+    .s1-textarea::placeholder { color: #C4A882; font-weight: 400; }
+
+    .s1-mic {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      width: 44px;
+      height: 44px;
+      background: var(--primary);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 3px 10px rgba(193,123,47,.45);
+      transition: transform .2s;
+    }
+    .s1-mic:hover { transform: scale(1.1); }
+    .s1-mic.listening {
+      background: #e53e3e;
+      animation: micPulse 1s ease-in-out infinite;
+    }
+    @keyframes micPulse {
+      0%,100% { box-shadow: 0 0 0 0   rgba(229,62,62,.5); }
+      50%     { box-shadow: 0 0 0 12px rgba(229,62,62,0);  }
+    }
+
+    .s1-hint {
+      text-align: center;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .s1-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 18px 32px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 4px 18px rgba(193,123,47,.4);
+      transition: transform .2s, opacity .2s;
+    }
+    .s1-btn:hover   { transform: translateY(-2px); }
+    .s1-btn:active  { transform: translateY(0); }
+    .s1-btn:disabled { opacity: .6; cursor: default; }
+
+    .s1-footer {
+      text-align: center;
+      padding: 16px;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    /* ══════════════════════════════════════════
+       SCREEN 2 — AI SUGGESTION
+    ══════════════════════════════════════════ */
+
+    .s2-header {
+      display: flex;
+      align-items: center;
+      padding: 20px 20px 0;
+      gap: 12px;
+    }
+    .s2-back {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: var(--text);
+      line-height: 1;
+      padding: 4px;
+    }
+    .s2-htitle {
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .s2-body {
+      flex: 1;
+      padding: 20px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .s2-ai-box {
+      background: linear-gradient(135deg, #FFF9EE, #FFF0D5);
+      border: 2px solid #FBBF6A;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+    }
+    .s2-ai-icon  { font-size: 2.2rem; margin-bottom: 6px; }
+    .s2-ai-label { font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 4px; }
+    .s2-ai-hint  { font-size: .82rem; font-weight: 600; color: var(--muted); }
+
+    .s2-field-label {
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .s2-title-input {
+      width: 100%;
+      border: 2px solid #E8D5B7;
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      background: white;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .s2-title-input:focus { border-color: var(--primary); }
+
+    .s2-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .s2-pill {
+      padding: 8px 16px;
+      border-radius: 50px;
+      border: 2px solid #E8D5B7;
+      background: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text);
+      transition: all .15s;
+    }
+    .s2-pill.sel {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .s2-confirm {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 18px 32px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 4px 18px rgba(193,123,47,.4);
+      transition: transform .2s, opacity .2s;
+    }
+    .s2-confirm:hover    { transform: translateY(-2px); }
+    .s2-confirm:disabled { opacity: .6; cursor: default; }
+
+    /* ══════════════════════════════════════════
+       SCREEN 3 — SUCCESS
+    ══════════════════════════════════════════ */
+
+    .s3-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 20px 24px;
+      gap: 20px;
+      text-align: center;
+    }
+    .s3-icon {
+      font-size: 5rem;
+      animation: popIn .5s cubic-bezier(.175,.885,.32,1.275);
+    }
+    @keyframes popIn {
+      0%   { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+    .s3-title    { font-size: 1.6rem; font-weight: 900; }
+    .s3-subtitle { font-size: .95rem; font-weight: 600; color: var(--muted); line-height: 1.6; }
+
+    .s3-preview {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: left;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+      width: 100%;
+      max-height: 180px;
+      overflow: hidden;
+      position: relative;
+    }
+    .s3-preview::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 56px;
+      background: linear-gradient(transparent, white);
+    }
+    .s3-ptitle { font-size: .95rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+    .s3-ptext  { font-size: .88rem; line-height: 1.65; }
+
+    .s3-home {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 18px 32px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      box-shadow: 0 4px 18px rgba(193,123,47,.4);
+    }
+    .s3-note {
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--muted);
+      line-height: 1.5;
+      padding: 0 8px;
+    }
+
+    /* ══════════════════════════════════════════
+       LOADING OVERLAY
+    ══════════════════════════════════════════ */
+
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(253,246,238,.94);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+    .loading-overlay.show { display: flex; }
+    .loading-spin {
+      font-size: 3rem;
+      animation: spin 1.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text);
+      text-align: center;
+      padding: 0 32px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════
+       SCREEN 1 — Story Idea Input
+  ═══════════════════════════════════════ -->
+  <div class="screen active" id="screen-input">
+
+    <div class="s1-topbar">
+      <a href="/" class="s1-logo">
+        <img src="images/logo.png" alt="vorlesen.de" onerror="this.style.display='none'" />
+        vorlesen.de
+      </a>
+    </div>
+
+    <div class="s1-hero">
+      <div class="s1-stars">
+        <span style="top:12%;left:8%;animation-delay:0s">✦</span>
+        <span style="top:18%;right:10%;animation-delay:.6s">✦</span>
+        <span style="top:55%;left:5%;font-size:.8rem;animation-delay:1.1s">✦</span>
+        <span style="top:45%;right:7%;font-size:.9rem;animation-delay:1.6s">✦</span>
+        <span style="top:70%;left:35%;font-size:.7rem;animation-delay:.3s">✦</span>
+        <span style="top:25%;left:52%;font-size:.75rem;animation-delay:.9s">✦</span>
+      </div>
+      <div class="s1-dragon">🐉</div>
+      <h1 class="s1-title">
+        Welche Geschichte<br><span class="hl">zaubern</span> wir heute?
+      </h1>
+      <p class="s1-subtitle">Deine Fantasie. Deine Geschichte.</p>
+    </div>
+
+    <div class="s1-body">
+      <div class="s1-textarea-wrap">
+        <textarea
+          id="story-idee"
+          class="s1-textarea"
+          placeholder="Erzähle hier, welche Geschichte du dir wünschst …"
+        ></textarea>
+        <button class="s1-mic" id="mic-btn" title="Sprechen statt tippen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+      </div>
+
+      <p class="s1-hint">Tippe deinen Wunsch ein oder erzähle ihn einfach über das Mikrofon.</p>
+
+      <button class="s1-btn" id="sc1-btn" onclick="goToSuggest()">
+        ✨ Geschichte zaubern
+      </button>
+    </div>
+
+    <div class="s1-footer">Mit Fantasie &amp; KI von vorlesen.de ♥</div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       SCREEN 2 — AI Suggestion / Confirm
+  ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-suggest">
+
+    <div class="s2-header">
+      <button class="s2-back" onclick="showScreen('screen-input')" title="Zurück">←</button>
+      <span class="s2-htitle">KI-Vorschlag</span>
+    </div>
+
+    <div class="s2-body">
+      <div class="s2-ai-box">
+        <div class="s2-ai-icon">🤖</div>
+        <div class="s2-ai-label">✦ KI schlägt vor</div>
+        <p class="s2-ai-hint">Du kannst Titel und Kategorie noch anpassen.</p>
+      </div>
+
+      <div>
+        <div class="s2-field-label">Titel der Geschichte</div>
+        <input type="text" id="suggest-titel" class="s2-title-input" placeholder="Titel …" />
+      </div>
+
+      <div>
+        <div class="s2-field-label">Kategorie</div>
+        <div class="s2-pills" id="cat-pills"></div>
+      </div>
+
+      <button class="s2-confirm" id="s2-confirm-btn" onclick="generateAndSave()">
+        🪄 Geschichte jetzt generieren
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       SCREEN 3 — Success
+  ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-success">
+    <div class="s3-body">
+      <div class="s3-icon">🎉</div>
+      <h2 class="s3-title">Deine Geschichte ist fertig!</h2>
+      <p class="s3-subtitle">
+        Sie erscheint jetzt unter <strong>NEU</strong> auf vorlesen.de<br>
+        und in der richtigen Kategorie.
+      </p>
+      <div class="s3-preview">
+        <div class="s3-ptitle" id="s3-titel"></div>
+        <div class="s3-ptext"  id="s3-preview"></div>
+      </div>
+      <a href="/" class="s3-home">📖 Zur Startseite</a>
+      <p class="s3-note">
+        💡 Die Geschichte ist zunächst als Text verfügbar.<br>
+        Füge später eine MP3-Datei hinzu, damit sie vorgelesen werden kann.
+      </p>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       LOADING OVERLAY
+  ═══════════════════════════════════════ -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spin">🪄</div>
+    <div class="loading-text" id="loading-txt">Geschichte wird gezaubert…</div>
+  </div>
+
+
+  <script>
+    const KATEGORIEN = ['Tiere','Abenteuer','Einschlafen','Lustig','Lernen','Weihnachten','Mut','Freundschaft'];
+    let selectedKat = '';
+
+    // ── Screen management ──────────────────────
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    // ── Loading overlay ────────────────────────
+    function showLoading(msg) {
+      document.getElementById('loading-txt').textContent = msg;
+      document.getElementById('loading-overlay').classList.add('show');
+    }
+    function hideLoading() {
+      document.getElementById('loading-overlay').classList.remove('show');
+    }
+
+    // ── Category pills ─────────────────────────
+    function renderPills(sel) {
+      selectedKat = sel;
+      document.getElementById('cat-pills').innerHTML = KATEGORIEN.map(k =>
+        `<button class="s2-pill${k===sel?' sel':''}" onclick="renderPills('${k}')">${k}</button>`
+      ).join('');
+    }
+
+    // ── SCREEN 1 → 2: get AI suggestion ────────
+    async function goToSuggest() {
+      const idee = document.getElementById('story-idee').value.trim();
+      if (!idee) {
+        alert('Bitte schreibe oder sprich zuerst deine Geschichte-Idee!');
+        return;
+      }
+      document.getElementById('sc1-btn').disabled = true;
+      showLoading('Die KI denkt nach … ✨');
+      try {
+        const resp = await fetch('/api/story-suggest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idee })
+        });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const { titel, kategorie } = await resp.json();
+        document.getElementById('suggest-titel').value = titel || '';
+        renderPills(kategorie || 'Abenteuer');
+        hideLoading();
+        showScreen('screen-suggest');
+      } catch (e) {
+        hideLoading();
+        alert('Fehler beim Verbinden mit der KI. Bitte nochmal versuchen.');
+      } finally {
+        document.getElementById('sc1-btn').disabled = false;
+      }
+    }
+
+    // ── SCREEN 2 → 3: generate + save ──────────
+    const LOADING_MSGS = [
+      'Geschichte wird geschrieben … 🖊️',
+      'Charaktere werden zum Leben erweckt … 🐉',
+      'Spannung wird aufgebaut … ✨',
+      'Wörter finden ihren Platz …',
+      'Fast fertig …',
+    ];
+
+    async function generateAndSave() {
+      const titel = document.getElementById('suggest-titel').value.trim();
+      const idee  = document.getElementById('story-idee').value.trim();
+      if (!titel)       { alert('Bitte gib einen Titel ein.'); return; }
+      if (!selectedKat) { alert('Bitte wähle eine Kategorie.'); return; }
+
+      document.getElementById('s2-confirm-btn').disabled = true;
+      let mi = 0;
+      showLoading(LOADING_MSGS[mi]);
+      const interval = setInterval(() => {
+        mi = (mi + 1) % LOADING_MSGS.length;
+        document.getElementById('loading-txt').textContent = LOADING_MSGS[mi];
+      }, 2600);
+
+      try {
+        const resp = await fetch('/api/story-save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ titel, kategorie: selectedKat, idee })
+        });
+        clearInterval(interval);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const data = await resp.json();
+
+        document.getElementById('s3-titel').textContent   = data.titel || titel;
+        document.getElementById('s3-preview').textContent = (data.text || '').slice(0, 320);
+
+        hideLoading();
+        showScreen('screen-success');
+      } catch (e) {
+        clearInterval(interval);
+        hideLoading();
+        alert('Fehler beim Generieren. Bitte nochmal versuchen.');
+      } finally {
+        document.getElementById('s2-confirm-btn').disabled = false;
+      }
+    }
+
+    // ── Microphone (Web Speech API) ─────────────
+    const micBtn   = document.getElementById('mic-btn');
+    const textarea = document.getElementById('story-idee');
+
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SR();
+      recognition.lang = 'de-DE';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onresult = e => {
+        const transcript = e.results[0][0].transcript;
+        textarea.value = textarea.value ? textarea.value + ' ' + transcript : transcript;
+        micBtn.classList.remove('listening');
+      };
+      recognition.onerror = () => micBtn.classList.remove('listening');
+      recognition.onend   = () => micBtn.classList.remove('listening');
+
+      micBtn.addEventListener('click', () => {
+        if (micBtn.classList.contains('listening')) {
+          recognition.stop();
+        } else {
+          recognition.start();
+          micBtn.classList.add('listening');
+        }
+      });
+    } else {
+      micBtn.style.opacity = '.45';
+      micBtn.title = 'Mikrofon-Eingabe wird von diesem Browser nicht unterstützt';
+    }
+  </script>
+</body>
+</html>

@@ -166,6 +166,9 @@
           <div class="ebene2-header">
             <button class="zurueck-btn" onclick="zeigeVorleserEbene1()">← Zurück</button>
             <h2 class="ebene2-titel" id="vorleser-bereich-titel"></h2>
+            <a href="/story-creator.html" id="gen-mobile-link" class="gen-mobile-link" style="display:none;" title="Geschichte per Handy schreiben">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3"/></svg>
+            </a>
           </div>
 
           <!-- TIPPS -->
@@ -702,6 +705,7 @@
       );
       const titel = { tipps:'Vorlesetipps', buecher:'Buchempfehlung', generator:'Geschichtengenerator' };
       document.getElementById('vorleser-bereich-titel').textContent = titel[bereich];
+      document.getElementById('gen-mobile-link').style.display = bereich === 'generator' ? 'flex' : 'none';
       document.getElementById('vorleser-' + bereich).style.display = 'block';
       if (bereich === 'tipps') renderTipps();
       if (bereich === 'buecher') renderBuchBeispiele();
@@ -1054,6 +1058,41 @@
         }
       }
     })();
+
+    // ── User-submitted stories from Redis ──────────────────────────────────
+    const KAT_BILDER = {
+      Tiere:       'images/kat-tiere.jpg',
+      Abenteuer:   'images/kat-abenteuer.jpg',
+      Einschlafen: 'images/kat-einschlafen.jpg',
+      Lustig:      'images/kat-lustig.jpg',
+      Lernen:      'images/kat-lernen.jpg',
+      Weihnachten: 'images/kat-weihnachten.jpg',
+      Mut:         'images/kat-mut.jpg',
+      Freundschaft:'images/kat-freundschaft.jpg',
+    };
+
+    async function ladeUserGeschichten() {
+      try {
+        const resp = await fetch('/api/stories');
+        if (!resp.ok) return;
+        const stories = await resp.json();
+        stories.forEach(s => {
+          const bild  = KAT_BILDER[s.kategorie] || 'images/kat-abenteuer.jpg';
+          const entry = { titel: s.titel, bild, audio: '' };
+          if (!geschichten['Neu'].find(g => g.titel === s.titel)) {
+            geschichten['Neu'].push(entry);
+          }
+          if (geschichten[s.kategorie] && !geschichten[s.kategorie].find(g => g.titel === s.titel)) {
+            geschichten[s.kategorie].push(entry);
+          }
+          if (!geschichtenTexte[s.titel]) {
+            geschichtenTexte[s.titel] = s.titel + '\n\n' + s.text;
+          }
+        });
+      } catch {}
+    }
+
+    ladeUserGeschichten();
   </script>
 
 </body>
