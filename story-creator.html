@@ -171,6 +171,44 @@
       50%     { box-shadow: 0 0 0 12px rgba(229,62,62,0);  }
     }
 
+    /* ── Waveform ── */
+    .waveform-bar {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(229,62,62,.18);
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height .35s cubic-bezier(.4,0,.2,1), opacity .3s ease, padding .35s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+    }
+    .waveform-bar.show {
+      max-height: 120px;
+      opacity: 1;
+      padding: 16px 16px 12px;
+    }
+    #waveform-canvas { width: 100%; height: 60px; display: block; }
+    .waveform-label {
+      font-size: .8rem;
+      font-weight: 800;
+      color: #e53e3e;
+      letter-spacing: .3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .waveform-dot {
+      width: 8px; height: 8px;
+      background: #e53e3e;
+      border-radius: 50%;
+      animation: blink .9s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
     .s1-hint {
       text-align: center;
       font-size: .85rem;
@@ -458,6 +496,15 @@
         </button>
       </div>
 
+      <!-- Waveform – appears when mic is recording -->
+      <div class="waveform-bar" id="waveform-bar">
+        <canvas id="waveform-canvas"></canvas>
+        <div class="waveform-label">
+          <span class="waveform-dot"></span>
+          Aufnahme läuft … Tippe auf das Mikrofon zum Stoppen
+        </div>
+      </div>
+
       <p class="s1-hint">Tippe deinen Wunsch ein oder erzähle ihn einfach über das Mikrofon.</p>
 
       <button class="s1-btn" id="sc1-btn" onclick="goToSuggest()">
@@ -640,9 +687,86 @@
       }
     }
 
-    // ── Microphone (Web Speech API) ─────────────
-    const micBtn   = document.getElementById('mic-btn');
-    const textarea = document.getElementById('story-idee');
+    // ── Microphone + Waveform ───────────────────
+    const micBtn      = document.getElementById('mic-btn');
+    const textarea    = document.getElementById('story-idee');
+    const waveformBar = document.getElementById('waveform-bar');
+    const waveCanvas  = document.getElementById('waveform-canvas');
+
+    let audioCtx, analyser, micSource, animFrame, micStream;
+
+    function startWaveform() {
+      navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        .then(stream => {
+          micStream = stream;
+          audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
+          analyser  = audioCtx.createAnalyser();
+          analyser.fftSize = 128;
+          analyser.smoothingTimeConstant = 0.82;
+          micSource = audioCtx.createMediaStreamSource(stream);
+          micSource.connect(analyser);
+          waveformBar.classList.add('show');
+          drawLoop();
+        })
+        .catch(() => {
+          // Microphone denied or unavailable — show CSS fallback only
+          waveformBar.classList.add('show');
+        });
+    }
+
+    function stopWaveform() {
+      cancelAnimationFrame(animFrame);
+      if (micSource) { micSource.disconnect(); micSource = null; }
+      if (audioCtx)  { audioCtx.close();       audioCtx  = null; }
+      if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
+      analyser = null;
+      waveformBar.classList.remove('show');
+      // Clear canvas
+      const ctx = waveCanvas.getContext('2d');
+      ctx.clearRect(0, 0, waveCanvas.width, waveCanvas.height);
+    }
+
+    function drawLoop() {
+      animFrame = requestAnimationFrame(drawLoop);
+
+      const dpr = window.devicePixelRatio || 1;
+      const W   = waveCanvas.offsetWidth  * dpr;
+      const H   = waveCanvas.offsetHeight * dpr;
+      if (waveCanvas.width !== W || waveCanvas.height !== H) {
+        waveCanvas.width  = W;
+        waveCanvas.height = H;
+      }
+
+      const ctx = waveCanvas.getContext('2d');
+      ctx.clearRect(0, 0, W, H);
+
+      if (!analyser) return;
+      const data = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(data);
+
+      const BAR_COUNT = 44;
+      const totalW    = W;
+      const slotW     = totalW / BAR_COUNT;
+      const barW      = Math.max(2, slotW * 0.55);
+      const gap       = slotW - barW;
+
+      for (let i = 0; i < BAR_COUNT; i++) {
+        // Use lower half of spectrum (voice range)
+        const di    = Math.floor(i / BAR_COUNT * data.length * 0.55);
+        const norm  = data[di] / 255;
+        const minH  = 3 * dpr;
+        const barH  = minH + norm * (H * 0.86 - minH);
+        const x     = i * slotW + gap / 2;
+        const y     = (H - barH) / 2;
+        const alpha = 0.55 + norm * 0.45;
+
+        ctx.fillStyle = `rgba(229, 62, 62, ${alpha})`;
+        ctx.beginPath();
+        const r = barW / 2;
+        ctx.roundRect(x, y, barW, barH, r);
+        ctx.fill();
+      }
+    }
 
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -651,20 +775,27 @@
       recognition.continuous = false;
       recognition.interimResults = false;
 
+      const stopRecording = () => {
+        micBtn.classList.remove('listening');
+        stopWaveform();
+      };
+
       recognition.onresult = e => {
         const transcript = e.results[0][0].transcript;
         textarea.value = textarea.value ? textarea.value + ' ' + transcript : transcript;
-        micBtn.classList.remove('listening');
+        stopRecording();
       };
-      recognition.onerror = () => micBtn.classList.remove('listening');
-      recognition.onend   = () => micBtn.classList.remove('listening');
+      recognition.onerror = stopRecording;
+      recognition.onend   = stopRecording;
 
       micBtn.addEventListener('click', () => {
         if (micBtn.classList.contains('listening')) {
           recognition.stop();
+          stopRecording();
         } else {
           recognition.start();
           micBtn.classList.add('listening');
+          startWaveform();
         }
       });
     } else {
