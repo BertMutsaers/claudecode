@@ -243,6 +243,18 @@
       transition: background .15s;
     }
     .rec-stop:hover { background: #111827; }
+    .rec-label {
+      flex: 1;
+      text-align: center;
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: none;
+    }
+    .s1-rec-bar.transcribing .rec-label { display: block; }
+    .s1-rec-bar.transcribing .rec-dots  { display: none; }
+    .s1-rec-bar.transcribing .rec-x,
+    .s1-rec-bar.transcribing .rec-stop  { visibility: hidden; }
 
     .s1-hint {
       text-align: center;
@@ -541,6 +553,7 @@
             <span></span><span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
           </div>
+          <span class="rec-label" id="rec-label">Transkribiere…</span>
           <button class="rec-stop" id="rec-stop" title="Aufnahme beenden">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <rect x="4" y="4" width="16" height="16" rx="2"/>
@@ -747,82 +760,102 @@
       }
     }
 
-    // ── Microphone (ChatGPT-Style) ──────────────
-    const micBtn   = document.getElementById('mic-btn');
-    const textarea = document.getElementById('story-idee');
+    // ── Microphone (Whisper via MediaRecorder) ──────────────
+    const micBtn    = document.getElementById('mic-btn');
+    const textarea  = document.getElementById('story-idee');
     textarea.addEventListener('input', () => { textarea.scrollTop = textarea.scrollHeight; });
-    const recBar   = document.getElementById('rec-bar');
-    const recCancel= document.getElementById('rec-cancel');
-    const recStop  = document.getElementById('rec-stop');
+    const recBar    = document.getElementById('rec-bar');
+    const recCancel = document.getElementById('rec-cancel');
+    const recStop   = document.getElementById('rec-stop');
 
-    let recActive       = false;
-    let textBeforeRec   = '';   // snapshot before session started
-    let committedText   = '';   // finalized transcription so far
-    let recognition     = null;
+    let mediaRecorder = null;
+    let audioChunks   = [];
+    let textBeforeRec = '';
 
     function showRecBar() {
       recBar.classList.add('show');
-      micBtn.style.opacity = '0';
+      micBtn.style.opacity       = '0';
       micBtn.style.pointerEvents = 'none';
-      textarea.style.paddingTop = '74px'; // make room for bar
+      textarea.style.paddingTop  = '74px';
     }
     function hideRecBar() {
-      recBar.classList.remove('show');
-      micBtn.style.opacity = '';
+      recBar.classList.remove('show', 'transcribing');
+      micBtn.style.opacity       = '';
       micBtn.style.pointerEvents = '';
-      textarea.style.paddingTop = '';
+      textarea.style.paddingTop  = '';
     }
 
-    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    function blobToBase64(blob) {
+      return new Promise((resolve, reject) => {
+        const reader  = new FileReader();
+        reader.onload  = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    }
 
-      function buildRec() {
-        const r = new SR();
-        r.lang            = 'de-DE';
-        r.continuous      = true;
-        r.interimResults  = true;
-        r.onresult = e => {
-          let interim = '';
-          for (let i = e.resultIndex; i < e.results.length; i++) {
-            if (e.results[i].isFinal) {
-              committedText += (committedText ? ' ' : '') + e.results[i][0].transcript.trim();
-            } else {
-              interim += e.results[i][0].transcript;
-            }
-          }
-          textarea.value = committedText + (interim ? ' ' + interim : '');
+    async function transcribeAndInsert(mimeType) {
+      recBar.classList.add('transcribing');
+      try {
+        const blob   = new Blob(audioChunks, { type: mimeType });
+        const base64 = await blobToBase64(blob);
+        const resp   = await fetch('/api/transcribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ audio: base64, mimeType }),
+        });
+        const data = await resp.json();
+        if (data.text) {
+          const existing = textBeforeRec.trim();
+          textarea.value = existing + (existing ? ' ' : '') + data.text;
           textarea.scrollTop = textarea.scrollHeight;
-        };
-        r.onerror = e => {
-          if (e.error !== 'aborted') stopRecording(true);
-        };
-        r.onend = () => {
-          // Restart if still active (iOS Safari stops after silence)
-          if (recActive) { try { r.start(); } catch {} }
-        };
-        return r;
-      }
-
-      function startRecording() {
-        textBeforeRec = textarea.value;
-        committedText = textarea.value; // keep existing text as base
-        recActive = true;
-        recognition = buildRec();
-        try { recognition.start(); } catch {}
-        showRecBar();
-      }
-
-      function stopRecording(cancel = false) {
-        recActive = false;
-        try { recognition.abort(); } catch {}
-        recognition = null;
-        if (cancel) textarea.value = textBeforeRec;
+        }
+      } catch {
+        textarea.value = textBeforeRec;
+      } finally {
         hideRecBar();
       }
+    }
 
-      micBtn.addEventListener('click', () => { if (!recActive) startRecording(); });
-      recStop.addEventListener('click',   () => stopRecording(false));
-      recCancel.addEventListener('click', () => stopRecording(true));
+    if (navigator.mediaDevices?.getUserMedia) {
+
+      micBtn.addEventListener('click', async () => {
+        if (mediaRecorder) return;
+        try {
+          const stream  = await navigator.mediaDevices.getUserMedia({ audio: true });
+          audioChunks   = [];
+          textBeforeRec = textarea.value;
+          mediaRecorder = new MediaRecorder(stream, { audioBitsPerSecond: 64000 });
+          mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+          mediaRecorder.onstop = () => {
+            stream.getTracks().forEach(t => t.stop());
+            transcribeAndInsert(mediaRecorder.mimeType);
+            mediaRecorder = null;
+          };
+          mediaRecorder.start();
+          showRecBar();
+        } catch (e) {
+          const msg = e.name === 'NotAllowedError'
+            ? 'Bitte erlaube den Mikrofonzugriff in den Browser-Einstellungen.'
+            : 'Mikrofon konnte nicht gestartet werden.';
+          alert(msg);
+        }
+      });
+
+      recStop.addEventListener('click', () => {
+        if (mediaRecorder?.state === 'recording') mediaRecorder.stop();
+      });
+
+      recCancel.addEventListener('click', () => {
+        if (mediaRecorder) {
+          mediaRecorder.onstop = null;
+          mediaRecorder.stop();
+          mediaRecorder.stream?.getTracks().forEach(t => t.stop());
+          mediaRecorder = null;
+        }
+        textarea.value = textBeforeRec;
+        hideRecBar();
+      });
 
     } else {
       micBtn.style.opacity = '.45';
