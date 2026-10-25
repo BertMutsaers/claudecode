@@ -132,7 +132,8 @@
       width: 100%;
       flex: 1;
       min-height: 220px;
-      padding: 20px 58px 20px 20px;
+      padding: 20px 20px 20px 20px;
+      padding-right: 62px;
       border: none;
       outline: none;
       resize: none;
@@ -148,7 +149,7 @@
 
     .s1-mic {
       position: absolute;
-      bottom: 14px;
+      top: 14px;
       right: 14px;
       width: 44px;
       height: 44px;
@@ -176,18 +177,18 @@
     /* ── Recording bar (ChatGPT-Style) ── */
     .s1-rec-bar {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
+      top: 0; left: 0; right: 0;
       height: 62px;
       background: rgba(255,255,255,.97);
       backdrop-filter: blur(6px);
-      border-top: 1.5px solid #dbeafe;
-      border-radius: 0 0 18px 18px;
+      border-bottom: 1.5px solid #dbeafe;
+      border-radius: 18px 18px 0 0;
       display: flex;
       align-items: center;
       padding: 0 14px;
       gap: 10px;
       opacity: 0;
-      transform: translateY(6px);
+      transform: translateY(-6px);
       pointer-events: none;
       transition: opacity .22s ease, transform .22s ease;
     }
@@ -761,13 +762,13 @@
       recBar.classList.add('show');
       micBtn.style.opacity = '0';
       micBtn.style.pointerEvents = 'none';
-      textarea.style.paddingBottom = '74px'; // make room for bar
+      textarea.style.paddingTop = '74px'; // make room for bar
     }
     function hideRecBar() {
       recBar.classList.remove('show');
       micBtn.style.opacity = '';
       micBtn.style.pointerEvents = '';
-      textarea.style.paddingBottom = '';
+      textarea.style.paddingTop = '';
     }
 
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
