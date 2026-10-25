@@ -12,22 +12,30 @@ module.exports = async function handler(req, res) {
   if (!apiKey) return res.status(500).json({ error: 'OPENAI_API_KEY nicht konfiguriert' });
 
   try {
-    const buffer = Buffer.from(audio, 'base64');
-    const ext    = (mimeType || '').includes('mp4') || (mimeType || '').includes('m4a') ? 'm4a' : 'webm';
+    const audioBuffer = Buffer.from(audio, 'base64');
+    const ext         = (mimeType || '').includes('mp4') || (mimeType || '').includes('m4a') ? 'm4a' : 'webm';
+    const boundary    = '----WhisperBoundary' + Date.now();
 
-    const formData = new FormData();
-    formData.append('file', new Blob([buffer], { type: mimeType || 'audio/webm' }), `rec.${ext}`);
-    formData.append('model', 'whisper-1');
-    formData.append('language', 'de');
+    // Build multipart body manually — avoids Node.js FormData/Blob reliability issues
+    const body = Buffer.concat([
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="model"\r\n\r\nwhisper-1\r\n`),
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="language"\r\n\r\nde\r\n`),
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="rec.${ext}"\r\nContent-Type: ${mimeType || 'audio/webm'}\r\n\r\n`),
+      audioBuffer,
+      Buffer.from(`\r\n--${boundary}--\r\n`),
+    ]);
 
     const resp = await fetch('https://api.openai.com/v1/audio/transcriptions', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}` },
-      body: formData,
+      headers: {
+        Authorization:  `Bearer ${apiKey}`,
+        'Content-Type': `multipart/form-data; boundary=${boundary}`,
+      },
+      body,
     });
 
     const data = await resp.json();
-    if (!resp.ok) throw new Error(data.error?.message || 'Transkription fehlgeschlagen');
+    if (!resp.ok) throw new Error(data.error?.message || `OpenAI ${resp.status}`);
     res.json({ text: data.text || '' });
   } catch (e) {
     res.status(500).json({ error: e.message });

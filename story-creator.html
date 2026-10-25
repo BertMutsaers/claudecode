@@ -805,13 +805,15 @@
           body: JSON.stringify({ audio: base64, mimeType }),
         });
         const data = await resp.json();
+        if (data.error) throw new Error(data.error);
         if (data.text) {
           const existing = textBeforeRec.trim();
           textarea.value = existing + (existing ? ' ' : '') + data.text;
           textarea.scrollTop = textarea.scrollHeight;
         }
-      } catch {
+      } catch (e) {
         textarea.value = textBeforeRec;
+        alert('Transkription fehlgeschlagen: ' + (e.message || 'Unbekannter Fehler'));
       } finally {
         hideRecBar();
       }
