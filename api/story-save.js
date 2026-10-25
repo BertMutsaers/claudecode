@@ -5,7 +5,7 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { titel, kategorie, idee } = req.body || {};
+  const { titel, kategorie, idee, autor } = req.body || {};
   if (!titel || !kategorie || !idee) {
     return res.status(400).json({ error: 'Titel, Kategorie und Idee sind erforderlich' });
   }
@@ -47,8 +47,8 @@ module.exports = async function handler(req, res) {
 
   // Save to Upstash Redis (list, newest first)
   const id    = Date.now().toString();
-  const story = { id, titel, kategorie, idee, text, created: new Date().toISOString() };
+  const story = { id, titel, kategorie, idee, autor: autor || '', text, created: new Date().toISOString() };
   await redis(['LPUSH', 'user_stories', JSON.stringify(story)]);
 
-  res.json({ id, titel, kategorie, text });
+  res.json({ id, titel, kategorie, autor: autor || '', text });
 };

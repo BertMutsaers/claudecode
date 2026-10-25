@@ -424,7 +424,8 @@
       height: 56px;
       background: linear-gradient(transparent, white);
     }
-    .s3-ptitle { font-size: .95rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+    .s3-ptitle { font-size: .95rem; font-weight: 800; color: var(--primary); margin-bottom: 2px; }
+    .s3-pautor { font-size: .78rem; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
     .s3-ptext  { font-size: .88rem; line-height: 1.65; }
 
     .s3-home {
@@ -585,6 +586,11 @@
         <div class="s2-pills" id="cat-pills"></div>
       </div>
 
+      <div>
+        <div class="s2-field-label">Autor / Autorin</div>
+        <input type="text" id="suggest-autor" class="s2-title-input" placeholder="z. B. Anna, Papa, Oma Hilde …" autocomplete="name" />
+      </div>
+
       <button class="s2-confirm" id="s2-confirm-btn" onclick="generateAndSave()">
         🪄 Geschichte jetzt generieren
       </button>
@@ -604,8 +610,9 @@
         und in der richtigen Kategorie.
       </p>
       <div class="s3-preview">
-        <div class="s3-ptitle" id="s3-titel"></div>
-        <div class="s3-ptext"  id="s3-preview"></div>
+        <div class="s3-ptitle"  id="s3-titel"></div>
+        <div class="s3-pautor"  id="s3-autor"></div>
+        <div class="s3-ptext"   id="s3-preview"></div>
       </div>
       <a href="/" class="s3-home">📖 Zur Startseite</a>
       <p class="s3-note">
@@ -694,6 +701,7 @@
     async function generateAndSave() {
       const titel = document.getElementById('suggest-titel').value.trim();
       const idee  = document.getElementById('story-idee').value.trim();
+      const autor = document.getElementById('suggest-autor').value.trim();
       if (!titel)       { alert('Bitte gib einen Titel ein.'); return; }
       if (!selectedKat) { alert('Bitte wähle eine Kategorie.'); return; }
 
@@ -709,13 +717,14 @@
         const resp = await fetch('/api/story-save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ titel, kategorie: selectedKat, idee })
+          body: JSON.stringify({ titel, kategorie: selectedKat, idee, autor })
         });
         clearInterval(interval);
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const data = await resp.json();
 
         document.getElementById('s3-titel').textContent   = data.titel || titel;
+        document.getElementById('s3-autor').textContent   = data.autor ? `von ${data.autor}` : '';
         document.getElementById('s3-preview').textContent = (data.text || '').slice(0, 320);
 
         hideLoading();

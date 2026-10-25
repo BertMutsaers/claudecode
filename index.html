@@ -1086,7 +1086,8 @@
             geschichten[s.kategorie].push(entry);
           }
           if (!geschichtenTexte[s.titel]) {
-            geschichtenTexte[s.titel] = s.titel + '\n\n' + s.text;
+            const byLine = s.autor ? `von ${s.autor}\n\n` : '';
+            geschichtenTexte[s.titel] = s.titel + '\n\n' + byLine + s.text;
           }
         });
       } catch {}
