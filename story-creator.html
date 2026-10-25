@@ -451,6 +451,14 @@
       text-align: center;
       box-shadow: 0 4px 18px rgba(37,99,235,.4);
     }
+    .s3-illustration {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.10);
+      display: none;
+    }
+    .s3-illustration.loaded { display: block; }
+
     .s3-note {
       font-size: .78rem;
       font-weight: 600;
@@ -614,6 +622,7 @@
         Sie erscheint jetzt unter <strong>NEU</strong> auf vorlesen.de<br>
         und in der richtigen Kategorie.
       </p>
+      <img id="s3-illustration" class="s3-illustration" alt="Illustration zur Geschichte" />
       <div class="s3-preview">
         <div class="s3-ptitle"  id="s3-titel"></div>
         <div class="s3-pautor"  id="s3-autor"></div>
@@ -733,6 +742,11 @@
         document.getElementById('s3-autor').textContent   = data.autor ? `von ${data.autor}` : '';
         document.getElementById('s3-preview').textContent = (data.text || '').slice(0, 320);
         document.getElementById('s3-link').href = 'https://vorlesen.de/?story=' + encodeURIComponent(finalTitel);
+        if (data.imageUrl) {
+          const img = document.getElementById('s3-illustration');
+          img.onload = () => img.classList.add('loaded');
+          img.src = data.imageUrl;
+        }
 
         hideLoading();
         showScreen('screen-success');

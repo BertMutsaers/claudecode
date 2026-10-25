@@ -1081,7 +1081,7 @@
         if (!resp.ok) return;
         const stories = await resp.json();
         stories.forEach(s => {
-          const bild  = KAT_BILDER[s.kategorie] || 'images/kat-abenteuer.jpg';
+          const bild  = s.imageUrl || KAT_BILDER[s.kategorie] || 'images/kat-abenteuer.jpg';
           const entry = { titel: s.titel, bild, audio: '' };
           if (!geschichten['Neu'].find(g => g.titel === s.titel)) {
             geschichten['Neu'].push(entry);
@@ -1100,7 +1100,7 @@
         if (storyParam) {
           const match = stories.find(s => s.titel === storyParam);
           if (match) {
-            const bild = KAT_BILDER[match.kategorie] || 'images/kat-abenteuer.jpg';
+            const bild = match.imageUrl || KAT_BILDER[match.kategorie] || 'images/kat-abenteuer.jpg';
             // Kinder-Tab sicherstellen (ist Standard, aber sicher ist sicher)
             document.querySelectorAll('.top-tab').forEach(b => b.classList.remove('active'));
             document.querySelector('[data-tab="kinder"]').classList.add('active');
