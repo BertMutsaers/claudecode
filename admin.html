@@ -527,6 +527,10 @@
           <img id="edit-imagepreview" src="" alt="" style="display:none;width:100%;border-radius:10px;margin-top:8px;" />
         </div>
         <div>
+          <div class="field-label">Vorlesedatei (URL)</div>
+          <input type="text" id="edit-audiourl" class="field-input" placeholder="https://vorlesen.de/audio/..." />
+        </div>
+        <div>
           <div class="field-label">Text</div>
           <textarea id="edit-text" class="field-textarea"></textarea>
         </div>
@@ -677,6 +681,7 @@
       document.getElementById('edit-autor').value    = s.autor    || '';
       document.getElementById('edit-text').value     = s.text     || '';
       document.getElementById('edit-imageurl').value = s.imageUrl || '';
+      document.getElementById('edit-audiourl').value = s.audioUrl || '';
       const prev = document.getElementById('edit-imagepreview');
       if (s.imageUrl) { prev.src = s.imageUrl; prev.style.display = 'block'; }
       else            { prev.src = '';          prev.style.display = 'none';  }
@@ -700,6 +705,7 @@
       const autor     = document.getElementById('edit-autor').value.trim();
       const text      = document.getElementById('edit-text').value.trim();
       const imageUrl  = document.getElementById('edit-imageurl').value.trim();
+      const audioUrl  = document.getElementById('edit-audiourl').value.trim();
 
       if (!titel) { alert('Titel darf nicht leer sein.'); return; }
 
@@ -711,12 +717,12 @@
         const resp = await fetch('/api/story-admin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pw: sessionPw, action: 'update', id, titel, kategorie, autor, text, imageUrl }),
+          body: JSON.stringify({ pw: sessionPw, action: 'update', id, titel, kategorie, autor, text, imageUrl, audioUrl }),
         });
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         // Update local copy
         const idx = stories.findIndex(s => s.id === id);
-        if (idx !== -1) stories[idx] = { ...stories[idx], titel, kategorie, autor, text, imageUrl };
+        if (idx !== -1) stories[idx] = { ...stories[idx], titel, kategorie, autor, text, imageUrl, audioUrl };
         renderStats();
         renderList();
         closeEdit();

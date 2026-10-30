@@ -1084,7 +1084,7 @@
         const katEintraege = {};
         stories.forEach(s => {
           const bild  = s.imageUrl || KAT_BILDER[s.kategorie] || 'images/kat-abenteuer.jpg';
-          const entry = { titel: s.titel, bild, audio: '' };
+          const entry = { titel: s.titel, bild, audio: s.audioUrl || '' };
           if (!geschichten['Neu'].find(g => g.titel === s.titel)) {
             neuEintraege.push(entry); // API liefert neueste zuerst → Reihenfolge beibehalten
           }

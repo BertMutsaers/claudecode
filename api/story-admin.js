@@ -47,7 +47,7 @@ module.exports = async function handler(req, res) {
 
   // ── POST: update or delete ─────────────────────────────────────────────
   if (req.method === 'POST') {
-    const { pw, action, id, titel, kategorie, autor, text, imageUrl } = req.body || {};
+    const { pw, action, id, titel, kategorie, autor, text, imageUrl, audioUrl } = req.body || {};
     if (pw !== ADMIN_PW)     return res.status(401).json({ error: 'Falsches Kennwort' });
     if (!action || !id)      return res.status(400).json({ error: 'action und id erforderlich' });
 
@@ -68,6 +68,7 @@ module.exports = async function handler(req, res) {
         ...(autor     !== undefined && { autor }),
         ...(text      !== undefined && { text }),
         ...(imageUrl  !== undefined && { imageUrl }),
+        ...(audioUrl  !== undefined && { audioUrl }),
       });
       await rewriteList(stories);
       return res.json({ ok: true });
