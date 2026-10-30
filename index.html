@@ -1080,11 +1080,12 @@
         const resp = await fetch('/api/stories');
         if (!resp.ok) return;
         const stories = await resp.json();
+        const neuEintraege = [];
         stories.forEach(s => {
           const bild  = s.imageUrl || KAT_BILDER[s.kategorie] || 'images/kat-abenteuer.jpg';
           const entry = { titel: s.titel, bild, audio: '' };
           if (!geschichten['Neu'].find(g => g.titel === s.titel)) {
-            geschichten['Neu'].unshift(entry);
+            neuEintraege.push(entry); // API liefert neueste zuerst → Reihenfolge beibehalten
           }
           if (geschichten[s.kategorie] && !geschichten[s.kategorie].find(g => g.titel === s.titel)) {
             geschichten[s.kategorie].push(entry);
@@ -1094,6 +1095,7 @@
             geschichtenTexte[s.titel] = s.titel + '\n\n' + byLine + s.text;
           }
         });
+        geschichten['Neu'] = [...neuEintraege, ...geschichten['Neu']];
 
         // Deep-link: ?story=TITEL springt direkt zur Geschichte
         const storyParam = new URLSearchParams(window.location.search).get('story');
