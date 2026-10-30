@@ -522,6 +522,11 @@
           <input type="text" id="edit-autor" class="field-input" placeholder="(optional)" />
         </div>
         <div>
+          <div class="field-label">Illustration (URL)</div>
+          <input type="text" id="edit-imageurl" class="field-input" placeholder="https://..." />
+          <img id="edit-imagepreview" src="" alt="" style="display:none;width:100%;border-radius:10px;margin-top:8px;" />
+        </div>
+        <div>
           <div class="field-label">Text</div>
           <textarea id="edit-text" class="field-textarea"></textarea>
         </div>
@@ -667,10 +672,18 @@
     function openEdit(id) {
       const s = stories.find(x => x.id === id);
       if (!s) return;
-      document.getElementById('edit-id').value      = s.id;
-      document.getElementById('edit-titel').value   = s.titel || '';
-      document.getElementById('edit-autor').value   = s.autor || '';
-      document.getElementById('edit-text').value    = s.text  || '';
+      document.getElementById('edit-id').value       = s.id;
+      document.getElementById('edit-titel').value    = s.titel    || '';
+      document.getElementById('edit-autor').value    = s.autor    || '';
+      document.getElementById('edit-text').value     = s.text     || '';
+      document.getElementById('edit-imageurl').value = s.imageUrl || '';
+      const prev = document.getElementById('edit-imagepreview');
+      if (s.imageUrl) { prev.src = s.imageUrl; prev.style.display = 'block'; }
+      else            { prev.src = '';          prev.style.display = 'none';  }
+      document.getElementById('edit-imageurl').addEventListener('input', function() {
+        if (this.value) { prev.src = this.value; prev.style.display = 'block'; }
+        else            { prev.src = '';          prev.style.display = 'none';  }
+      }, { once: true });
       const sel = document.getElementById('edit-kategorie');
       sel.value = KATEGORIEN.includes(s.kategorie) ? s.kategorie : KATEGORIEN[0];
       document.getElementById('edit-modal').classList.add('open');
@@ -686,6 +699,7 @@
       const kategorie = document.getElementById('edit-kategorie').value;
       const autor     = document.getElementById('edit-autor').value.trim();
       const text      = document.getElementById('edit-text').value.trim();
+      const imageUrl  = document.getElementById('edit-imageurl').value.trim();
 
       if (!titel) { alert('Titel darf nicht leer sein.'); return; }
 
@@ -697,12 +711,12 @@
         const resp = await fetch('/api/story-admin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pw: sessionPw, action: 'update', id, titel, kategorie, autor, text }),
+          body: JSON.stringify({ pw: sessionPw, action: 'update', id, titel, kategorie, autor, text, imageUrl }),
         });
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         // Update local copy
         const idx = stories.findIndex(s => s.id === id);
-        if (idx !== -1) stories[idx] = { ...stories[idx], titel, kategorie, autor, text };
+        if (idx !== -1) stories[idx] = { ...stories[idx], titel, kategorie, autor, text, imageUrl };
         renderStats();
         renderList();
         closeEdit();
