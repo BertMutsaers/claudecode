@@ -1084,7 +1084,7 @@
           const bild  = s.imageUrl || KAT_BILDER[s.kategorie] || 'images/kat-abenteuer.jpg';
           const entry = { titel: s.titel, bild, audio: '' };
           if (!geschichten['Neu'].find(g => g.titel === s.titel)) {
-            geschichten['Neu'].push(entry);
+            geschichten['Neu'].unshift(entry);
           }
           if (geschichten[s.kategorie] && !geschichten[s.kategorie].find(g => g.titel === s.titel)) {
             geschichten[s.kategorie].push(entry);
